@@ -24,6 +24,9 @@
   <ItemGroup>
     <None Include="GDCPC2013\README.md" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="hdu 2061水题.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{951DE2CF-06C5-4E74-9D3A-352600AFF5AD}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

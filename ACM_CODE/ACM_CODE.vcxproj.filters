@@ -24,4 +24,9 @@
       <Filter>源文件</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="hdu 2061水题.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>
