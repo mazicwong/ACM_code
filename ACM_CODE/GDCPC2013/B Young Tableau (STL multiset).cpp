@@ -6,7 +6,6 @@
 using namespace std;
 typedef long long ll;
 /*
-gems : 宝石
 
 题意:
 限定m*n大小的数列，给定K个数，然后对数列可以进行Insert（a），Remove（a），Find（a）操作，
