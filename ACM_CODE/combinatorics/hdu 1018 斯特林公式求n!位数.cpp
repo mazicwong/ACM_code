@@ -8,7 +8,6 @@ using namespace std;
 求n!的位数
 斯特林公式（Stirling'sapproximation）是一条用来取n的阶乘的近似值的数学公式
 位数为: log10(2*pi*n)/2+n*log10(n/e)+1
-定理：第一类Stirling数s(p,k)计数的是把p个对象排成k个非空循环排列的方法数。
 */
 const double e = 2.7182818284590452354;
 const double PI = acos(-1);
