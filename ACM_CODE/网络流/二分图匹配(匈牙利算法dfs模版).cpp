@@ -5,10 +5,15 @@ using namespace std;
 /*
 二部图当且仅当没有奇圈
 求二部图的最大匹配用匈牙利算法:
-http://blomap.csdn.net/liwen_7/article/details/7797652
+
+
+参考:hdu 2063 二分图匹配(匈牙利算法dfs)
+
+
+hdu 3605 二分图多重匹配(未解决)
 */
 
-//对应的点都是从1...n
+//以下: 对应的点都是从1...n
 //在main中处理好memset(map,0)跟map[a][b]=1就行
 int uu, vv;//两边数目
 bool map[maxn][maxn];//匹配情况
