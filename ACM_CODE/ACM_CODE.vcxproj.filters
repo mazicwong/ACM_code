@@ -15,18 +15,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
+    <ClCompile Include="1.cpp">
       <Filter>头文件</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="GDCPC2013\README.md">
-      <Filter>源文件</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="easy problem\hdu 1048.cpp">
-      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
