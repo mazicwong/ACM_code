@@ -22,7 +22,7 @@
     <None Include="DP\概率DP\概率DP.md" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DP\概率DP\hdu 3853 概率DP.cpp" />
+    <ClCompile Include="DP\概率DP\hdu 3853 概率DP%28左上走到右下%29.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{951DE2CF-06C5-4E74-9D3A-352600AFF5AD}</ProjectGuid>
