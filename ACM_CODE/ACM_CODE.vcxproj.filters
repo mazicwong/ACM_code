@@ -20,7 +20,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DP\概率DP\poj 2096 概率DP入门题.cpp">
+    <ClCompile Include="DP\概率DP\hdu 3853 概率DP.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
