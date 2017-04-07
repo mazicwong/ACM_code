@@ -15,7 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="1.cpp">
+    <None Include="DP\概率DP\概率DP.md">
+      <Filter>头文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DP\概率DP\poj 2096 概率DP入门题.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
