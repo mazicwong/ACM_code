@@ -20,7 +20,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="greedy\hdu 5237 简单贪心.cpp">
+    <ClCompile Include="big num\hdu 5241 大数乘法.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
