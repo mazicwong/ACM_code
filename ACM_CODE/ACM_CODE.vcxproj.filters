@@ -20,7 +20,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DP\概率DP\hdu 5236 概率DP+贪心.cpp">
+    <ClCompile Include="greedy\hdu 5237 简单贪心.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
