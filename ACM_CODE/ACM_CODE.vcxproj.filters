@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DP\概率DP\概率DP.md">
-      <Filter>头文件</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="big num\hdu 5241 大数乘法.cpp">
+    <ClCompile Include="number theory\矩阵+高斯\hdu 5755 高斯消元裸题.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="number theory\矩阵+高斯\高斯消元模版.md">
+      <Filter>头文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

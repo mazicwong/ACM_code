@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DP\概率DP\概率DP.md" />
+    <ClCompile Include="number theory\矩阵+高斯\hdu 5755 高斯消元裸题.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="big num\hdu 5241 大数乘法.cpp" />
+    <None Include="number theory\矩阵+高斯\高斯消元模版.md" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{951DE2CF-06C5-4E74-9D3A-352600AFF5AD}</ProjectGuid>
