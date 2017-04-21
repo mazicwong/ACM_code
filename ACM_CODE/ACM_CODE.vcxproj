@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="number theory\矩阵+高斯\hdu 5755 高斯消元裸题.cpp" />
+    <ClCompile Include="poj 2552 模拟水题.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="number theory\矩阵+高斯\高斯消元模版.md" />
