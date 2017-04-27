@@ -21,9 +21,6 @@
   <ItemGroup>
     <None Include="number theory\矩阵+高斯\高斯消元模版.md" />
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="number theory\hdu 5238 中国剩余定理+线段树.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{951DE2CF-06C5-4E74-9D3A-352600AFF5AD}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

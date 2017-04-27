@@ -19,9 +19,4 @@
       <Filter>头文件</Filter>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="number theory\hdu 5238 中国剩余定理+线段树.cpp">
-      <Filter>头文件</Filter>
-    </ClCompile>
-  </ItemGroup>
 </Project>
