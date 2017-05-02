@@ -19,4 +19,9 @@
       <Filter>头文件</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="省赛注意%28A%29.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>
