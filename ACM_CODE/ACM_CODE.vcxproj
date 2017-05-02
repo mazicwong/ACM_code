@@ -23,7 +23,7 @@
     <None Include="坑.md" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="省赛注意(B).cpp" />
+    <ClCompile Include="hdu 1204 Markov过程求期望.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{951DE2CF-06C5-4E74-9D3A-352600AFF5AD}</ProjectGuid>

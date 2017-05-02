@@ -23,7 +23,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="省赛注意(B).cpp">
+    <ClCompile Include="hdu 1204 Markov过程求期望.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
