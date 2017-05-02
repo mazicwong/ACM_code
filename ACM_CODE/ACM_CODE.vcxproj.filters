@@ -21,9 +21,12 @@
     <None Include="坑.md">
       <Filter>头文件</Filter>
     </None>
+    <None Include="combinatorics\生成排列与组合.md">
+      <Filter>头文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="hdu 1204 Markov过程求期望.cpp">
+    <ClCompile Include="hdu 1015 dfs回溯.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
