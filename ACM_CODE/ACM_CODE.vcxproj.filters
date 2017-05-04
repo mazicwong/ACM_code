@@ -25,4 +25,12 @@
       <Filter>头文件</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="省赛注意(B).cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="字符串\mancher\manacher.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>

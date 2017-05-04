@@ -23,6 +23,10 @@
     <None Include="number theory\矩阵+高斯\高斯消元模版.md" />
     <None Include="坑.md" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="字符串\mancher\manacher.cpp" />
+    <ClCompile Include="省赛注意(B).cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{951DE2CF-06C5-4E74-9D3A-352600AFF5AD}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
