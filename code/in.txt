@@ -1,8 +1,0 @@
-2
-3
-Algorithm 3 97
-DataStruct 3 90
-softwareProject 4 85
-2
-Database 4 59
-English 4 81
