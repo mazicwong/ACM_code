@@ -29,8 +29,8 @@ hdu 1698
  * build()     建树
  * update()    更新值
  * query()     查询区间和
- * PushUp()    建树和更新的递归后更新value
- * PushDown()  更新和查询时向下更新lazy,value
+ * PushUp()    (建树和更新时)回溯维护value
+ * PushDown()  (查询或更新有交集时才会用到)向下更新lazy,value
  * 
  * 更新: 如果刚好覆盖一个节点,则增加lazy值,否则更新value,再继续下传
  *       这样就不用每次都更新到叶子节点
@@ -55,7 +55,7 @@ typedef struct {
 }node;
 node tree[maxn<<2]; //tree[1..2^n-1]
 int arr[maxn];      //存放初始节点arr[1..n]
-ll sum = 0;         //查询到的和
+int sum = 0;         //查询到的和
 
 
 //"创建区间"和"更新区间"最后的递归回溯时向上更新value
@@ -70,10 +70,10 @@ void PushDown(int rt)
 {
     if (tree[rt].lazy)
     {
-        tree[L(rt)].lazy += tree[rt].lazy;
-        tree[R(rt)].lazy += tree[rt].lazy;
-        tree[L(rt)].value += (tree[L(rt)].right-tree[L(rt)].left+1)*tree[rt].lazy;
-        tree[R(rt)].value += (tree[R(rt)].right-tree[R(rt)].left+1)*tree[rt].lazy;
+        tree[L(rt)].lazy = tree[rt].lazy;
+        tree[R(rt)].lazy = tree[rt].lazy;
+        tree[L(rt)].value = (tree[L(rt)].right-tree[L(rt)].left+1)*tree[rt].lazy;
+        tree[R(rt)].value = (tree[R(rt)].right-tree[R(rt)].left+1)*tree[rt].lazy;
         tree[rt].lazy = 0;
     }
 }
@@ -85,7 +85,7 @@ void build(int l, int r, int rt)
     tree[rt].lazy = 0;
     if (l==r) //找到叶子,赋值
     { 
-        tree[rt].value = arr[l];
+        tree[rt].value = 1;
         return;
     }
 
@@ -95,7 +95,7 @@ void build(int l, int r, int rt)
     build(l,mid,L(rt));
     build(mid+1,r,R(rt));
 
-    //更新value的操作
+    //回溯维护value(区间和)
     PushUp(rt);
 }
 
@@ -106,8 +106,8 @@ void update(int l, int r, int val, int rt)//更新范围[l,r],当前所在的根rt
     if (l<=tree[rt].left && tree[rt].right<=r)//单点更新的话,这里就用等于
     {
         //这个节点在更新的区间里面,直接算完lazy和value然后退出
-        tree[rt].lazy += val;
-        tree[rt].value += (tree[rt].right-tree[rt].left+1)*val;
+        tree[rt].lazy = val;
+        tree[rt].value = (tree[rt].right-tree[rt].left+1)*val;
         return;
     }
 
@@ -125,7 +125,7 @@ void update(int l, int r, int val, int rt)//更新范围[l,r],当前所在的根rt
         update(mid+1,r,val,R(rt));
     }
 
-    //更新value的操作
+    //回溯维护value
     PushUp(rt);
 }
 
@@ -156,33 +156,23 @@ void query(int l, int r, int rt)//查找的范围[l,r],当前所在根rt
 int main()
 {
     freopen("in","r",stdin);
-    int n, q;
-    while (scanf("%d%d",&n,&q) != EOF)
+    int t;cin>>t;
+    for (int cas=1;cas<=t;cas++)
     {
-        for (int i=1; i<=n;i++)
-            scanf("%d",&arr[i]);
+        int n, q;
+        scanf("%d%d",&n,&q);
         build(1,n,1);//left,right,rt
-
         while (q--)
         {
-            getchar();
-            char qq = getchar();
-            if ('C' == qq) //update
-            {
-                int idxl,idxr;
-                ll val;
-                scanf("%d%d%lld",&idxl,&idxr,&val);
-                update(idxl,idxr,val,1);//left,right,value,rt
-            }
-            else //sum
-            {
-                int l, r;
-                scanf("%d%d",&l,&r);
-                sum = 0;
-                query(l, r, 1);//left,right,rt
-                printf("%lld\n",sum);
-            }
+            int idxl,idxr;
+            int val;
+            scanf("%d%d%d",&idxl,&idxr,&val);
+            update(idxl,idxr,val,1);//left,right,value,rt
         }
+        sum = 0;
+        query(1,n,1);//left,right,rt
+		printf("Case %d: The total value of the hook is %d.\n",cas,sum);
     }
+
     return 0;
 }

@@ -67,7 +67,6 @@ void update(int l, int r, int val, int rt)
 //查询最值(节点的value最大)
 void query(int l, int r, int rt)//查找的范围[l,r],当前所在的根rt
 {
-    //if (l<=tree[rt].left && tree[rt].right<=r)//找到区间
     if (l==tree[rt].left && tree[rt].right==r)//找到区间
     {
         ans = max(ans,tree[rt].value);
