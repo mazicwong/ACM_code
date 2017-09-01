@@ -104,7 +104,7 @@ st.erase(st.find(a))    //从st中删除数a
 5.映射map:
 创建:
 map<string,int> mp;
-it = map<string,int>::iterator it;
+map<string,int>::iterator it = mp.begin();
 
 基本操作:
 mp.insert(pair<string,int>("month",1)); //插入一个元素
@@ -112,6 +112,7 @@ mp["month"]=1;							//插入一个元素
 it = mp.find("month");                  //返回一个迭代器指向键值为key的元素，找不到则返回最后一位元素后面的迭代器(map尾部)
 mp.erase(it);                           //删除一个元素,注意用find后it不能是mp.end()
 mp.count("month");                      //返回指定元素出现的次数,效率:logn
+for(it=mp.begin();it!=mp.end();it++) {it->begin;  it->second;}
 
 
 begin()          返回指向map头部的迭代器
@@ -216,7 +217,7 @@ int len = unique(mp,mp+n)-mp;
 
 
 //下面归入位运算
-13.lowbit hdu1196
+13. lowbit hdu1196(find the lowest bit)
 lowbit: 返回2^t  (t为从右往左第一次出现1的位置)
 int lowbit(int x)
 {
