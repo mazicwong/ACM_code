@@ -20,8 +20,8 @@ int m;
 int solve(int len)
 {//传入:num[0..len-1]是左右两段区间对应的dist值(预处理)
  //所求对应为找最大区间使得sum{num[]}<=m
-    int ans=0,sum=0;
-    int s=0,t=0;
+    int ans=0;
+    int s=0,t=0,sum=0;//左右端点+前缀和
     while(1)
     {
         while(sum+num[t]<=m && t<len)//右端点t向右移动
