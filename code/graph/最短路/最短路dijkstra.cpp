@@ -1,10 +1,3 @@
-/*************************************************************************
-	> File Name: q.cpp
-	> Author: mazicwong
-	> Mail: mazicwong@gmail.com
-	> Created Time: 2017年08月24日 星期四 23时19分14秒
- ************************************************************************/
-
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
@@ -18,7 +11,6 @@
 #include <stack>
 #include <set>
 using namespace std;
-
 /*
  * 使用优先队列优化Dijkstra算法
  * 复杂度O(ElogE)
@@ -43,6 +35,7 @@ int dist[maxn];//源点到其他点距离
 void dijkstra(int n,int beg)//点的编号从1开始
 {
     priority_queue<PII, vector<PII>, greater<PII> > Q;
+    for (int i=0;i<=n;i++) dist[i]=INF;
     dist[beg]=0;
     Q.push(PII(0,beg));
     
@@ -72,7 +65,6 @@ void init(int n)
 {
     for (int i=0;i<=n;i++)
         E[i].clear();
-    memset(dist,INF,sizeof(dist));
 }
 int main()
 {   //poj2378 从n点走到1点,给出权重,求最短路
@@ -87,6 +79,7 @@ int main()
         addedge(u,v,cost);
         addedge(v,u,cost);
     }
+    //如果源点为1,则用dijkstra(n,1)
     dijkstra(n,n);//MAX_V,begin (n点走到1点)
     cout << dist[1];
     return 0;

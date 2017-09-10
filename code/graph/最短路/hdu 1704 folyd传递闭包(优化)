@@ -1,0 +1,75 @@
+/*************************************************************************
+	> File Name: hdu1704.cpp
+	> Author: mazicwong
+	> Mail: mazicwong@gmail.com
+	> Created Time: 2017年07月22日 星期六 16时07分32秒
+ ************************************************************************/
+
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include <algorithm>
+using namespace std;
+const int maxn = 500+5;
+const int INF = 0x3f3f3f3f;
+int win[maxn][maxn];
+int n,m;
+void floyd__()
+{
+    for (int k=1;k<=n;k++)
+    {
+        for (int i=1;i<=n;i++)
+        {
+            for (int j=1;j<=n;j++)
+            {
+                if (win[i][k] && win[k][j])
+                    win[i][j] = 1;
+            }
+        }
+    }
+}
+void floyd()
+{
+    for (int k=1;k<=n;k++)
+        for (int i=1;i<=n;i++)
+            if (win[i][k])
+                for (int j=1;j<=n;j++)
+                    if (win[k][j])
+                        win[i][j] = 1;
+}
+
+
+int main()
+{
+    freopen("in","r",stdin);
+    int t;
+    cin >> t;
+    int a,b;
+    while(t--)
+    {
+        scanf("%d%d",&n,&m);
+        memset(win,0,sizeof(win));
+        for (int i=0;i<m;i++)
+        {
+            scanf("%d%d",&a,&b);
+            win[a][b]=1;
+        }
+        floyd();
+        //多少个匹配是不存在的
+        int ans = 0;
+        for (int i=1;i<=n;i++)
+        {
+            for (int j=1;j<i;j++)
+            {
+                if (win[i][j]==0 && win[j][i]==0)
+                {
+                    ans++;
+                }
+            }
+        }
+        printf("%d\n",ans);
+    }
+    return 0;
+}

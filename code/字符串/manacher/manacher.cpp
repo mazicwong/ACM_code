@@ -1,52 +1,94 @@
 #include <iostream>
-#include <string>
-#include <cstring>
 #include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include <cmath>
 #include <algorithm>
+#include <map>
+#include <vector>
+#include <queue>
+#include <stack>
+#include <set>
 using namespace std;
-/*
-manacher¡°ÂíÀ­³µ¡±Ëã·¨ :¼ÆËã×Ö·û´®µÄ×î³¤»ØÎÄ×Ö´®
 
-ÎªÁË±ÜÃâ¸üĞÂPµÄÊ±ºòµ¼ÖÂÔ½½ç£¬ÎÒÃÇÔÚ×Ö·û´®TµÄÇ°Ôö¼ÓÒ»¸öÌØÊâ×Ö·û£¬
-±ÈÈçËµ¡®$¡¯,ËùÒÔËã·¨ÖĞ×Ö·û´®ÊÇ´Ó1¿ªÊ¼µÄ
+
+/*
+ * manacherâ€œé©¬æ‹‰è½¦â€ç®—æ³•: è®¡ç®—å­—ç¬¦ä¸²çš„æœ€é•¿å›æ–‡å­—ä¸² O(n)
+ *
+ * ç®—æ³•:æ¯ä¸¤ä¸ªç›¸é‚»å­—ç¬¦ä¸­æ’å…¥ä¸€ä¸ªåˆ†éš”ç¬¦'#'
+ * æ–°ä¸²ä¸‹æ ‡ä»1å¼€å§‹
+ *
+ * æŠŠå¥‡å¶é•¿åº¦çš„å›æ–‡ä¸²åŒæ„è€ƒè™‘äº†
+ * ä¸ºäº†é¿å…æ›´æ–°Pçš„æ—¶å€™å¯¼è‡´è¶Šç•Œï¼Œæˆ‘ä»¬åœ¨å­—ç¬¦ä¸²Tçš„å‰å¢åŠ ä¸€ä¸ªç‰¹æ®Šå­—ç¬¦ï¼Œ
+ *
+ * æ¯”å¦‚è¯´â€˜$â€™,æ‰€ä»¥ç®—æ³•ä¸­å­—ç¬¦ä¸²æ˜¯ä»1å¼€å§‹çš„
 */
-const int maxn = 1000010;
-char str[maxn];//Ô­×Ö·û´®  
-char tmp[maxn << 1];//×ª»»ºóµÄ×Ö·û´®  
-int Len[maxn << 1];
-//×ª»»Ô­Ê¼´®  
-int INIT(char *st)
+
+/*
+  åŸä¸²ï¼š       w   a   a   b   w   s   w   f   d
+  æ–°ä¸²ï¼š     # w # a # a # b # w # s # w # f # d #
+è¾…åŠ©æ•°ç»„Pï¼š  1 2 1 2 3 2 1 2 1 2 1 4 1 2 1 2 1 2 1
+
+P[id]: è®°å½•ä»¥str[id]ä¸ºä¸­å¿ƒçš„æœ€é•¿å›æ–‡ä¸²
+å½“ä»¥str[id]ä¸ºç¬¬ä¸€ä¸ªå­—ç¬¦,è¿™ä¸ªæœ€é•¿å›æ–‡ä¸²å‘å³å»¶ä¼¸äº†P[id]ä¸ªå­—ç¬¦
+P[id]-1å°±æ˜¯è¯¥å›æ–‡å­ä¸²åœ¨åŸä¸²ä¸­çš„é•¿åº¦ï¼ˆåŒ…æ‹¬â€˜#â€™ï¼‰
+
+å‚æ•°è¯´æ˜:
+str[i]:  å­˜åŸä¸²
+Ma[i]:   å­˜æ’å…¥#æ‰©å±•åçš„æ–°ä¸²
+Mp[i]:   
+*/
+
+
+const int MAXN=110010;
+char Ma[MAXN*2];//æ–°ä¸²,æ’å…¥#åçš„
+int Mp[MAXN*2]; //Mp[i]-1æ˜¯Ma[i]æ‰€åœ¨çš„å›æ–‡å­ä¸²åœ¨åŸä¸²çš„é•¿åº¦
+void Manacher(char s[],int len)
 {
-	int i, len = strlen(st);
-	tmp[0] = '@';//×Ö·û´®¿ªÍ·Ôö¼ÓÒ»¸öÌØÊâ×Ö·û£¬·ÀÖ¹Ô½½ç  
-	for (i = 1; i <= 2 * len; i += 2)
-	{
-		tmp[i] = '#';
-		tmp[i + 1] = st[i / 2];
-	}
-	tmp[2 * len + 1] = '#';
-	tmp[2 * len + 2] = '$';//×Ö·û´®½áÎ²¼ÓÒ»¸ö×Ö·û£¬·ÀÖ¹Ô½½ç  
-	tmp[2 * len + 3] = 0;
-	return 2 * len + 1;//·µ»Ø×ª»»×Ö·û´®µÄ³¤¶È  
+    //è®¡ç®—Ma[0..2*len)   
+    int l=0;
+    Ma[l++]='$';//å­—ç¬¦ä¸²å¼€å¤´å¢åŠ ä¸€ä¸ªç‰¹æ®Šå­—ç¬¦ï¼Œé˜²æ­¢è¶Šç•Œ
+    Ma[l++]='#';
+    for(int i=0;i<len;i++)
+    {
+        Ma[l++]=s[i];
+        Ma[l++]='#';
+    }
+    Ma[l]=0;
+
+    //è®¡ç®—Mp[0..2*len)
+    int mx=0,id=0;//mxä¸ºå½“å‰è®¡ç®—å›æ–‡ä¸²æœ€å³è¾¹å­—ç¬¦çš„æœ€å¤§å€¼
+    for(int i=0;i<l;i++)
+    {
+        Mp[i]=mx>i?min(Mp[2*id-i],mx-i):1;
+        while(Ma[i+Mp[i]]==Ma[i-Mp[i]])Mp[i]++;
+        if(i+Mp[i]>mx)
+        {
+            mx=i+Mp[i];
+            id=i;
+        }
+    }
 }
-//ManacherËã·¨¼ÆËã¹ı³Ì  
-int MANACHER(char *st, int len)
+ /*
+  *
+  * * abaaba
+  * * i:     0 1 2 3 4 5 6 7 8 9 10 11 12 13
+  * * Ma[i]: $ # a # b # a # a # b  #  a  #
+  * * Mp[i]: 1 1 2 1 4 1 2 7 2 1 4  1  2  1
+  * */
+char str[MAXN];
+int main()
 {
-	int mx = 0, ans = 0, po = 0;//mx¼´Îªµ±Ç°¼ÆËã»ØÎÄ´®×îÓÒ±ß×Ö·ûµÄ×î´óÖµ  
-	for (int i = 1; i <= len; i++)
-	{
-		if (mx>i)
-			Len[i] = min(mx - i, Len[2 * po - i]);//ÔÚLen[j]ºÍmx-iÖĞÈ¡¸öĞ¡  
-		else
-			Len[i] = 1;//Èç¹ûi>=mx£¬Òª´ÓÍ·¿ªÊ¼Æ¥Åä  
-		while (st[i - Len[i]] == st[i + Len[i]])
-			Len[i]++;
-		if (Len[i] + i>mx)//ÈôĞÂ¼ÆËãµÄ»ØÎÄ´®ÓÒ¶ËµãÎ»ÖÃ´óÓÚmx£¬Òª¸üĞÂpoºÍmxµÄÖµ  
-		{
-			mx = Len[i] + i;
-			po = i;
-		}
-		ans = max(ans, Len[i]);
-	}
-	return ans - 1;//·µ»ØLen[i]ÖĞµÄ×î´óÖµ-1¼´ÎªÔ­´®µÄ×î³¤»ØÎÄ×Ó´®µÄ³¤¶È   
+    freopen("in","r",stdin);
+    while(scanf("%s",str)!=EOF)
+    {
+        int len=strlen(str);
+        Manacher(str,len);
+        int ans=0;
+        for(int i=0;i<2*len+2;i++)
+            ans=max(ans,Mp[i]-1);
+        printf("%d\n",ans);
+    }
+    return 0;
 }

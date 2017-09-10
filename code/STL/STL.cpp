@@ -46,19 +46,22 @@ v.push_back(a);         //压入元素a到末端
 v.pop_back();           //弹出最后一个元素
 v.begin();              //容器的起始位置
 v.end();                //容器最后一个位置
-v.front();v.back();     //返回第一个元素(最后一个元素,但不判断是否存在)
 v.empty();              //返回是否容器为空
 v.clear();              //清空容器
-v.erase(m);             //删除m位置的数据，并返回下一个数据的地址(m是迭代器)
+v.erase(m);             //删除迭代器m处的数据，并返回下一个数据的地址(注意循环中最好用it=vec.erase(it))
 v.erase(m,n);           //删除m到n之间的数据，并返回下一个数据的地址
-v2.assign(8,1);         // 重新给vec2赋值，8个成员的初始值都为1 
+v.front();v.back();     //返回第一个元素(最后一个元素,但不判断是否存在)
+v2.assign(8,1);         //重新给vec2赋值，8个成员的初始值都为1 
 v.reserve(100);v.resize(101);    //resize已经创建空间如果再v.push_back();空间就会到101，而reserve只是预留空间并没有真正创建，v.push_back();只是在第1位  
-v.size();v.capacity();       //size表示的是已经创建的空间大小也可以表示元素个数可用v[]的形式直接访问，capacity容器容量，是预留空间并没有实际创建  
+v.size();               //已经创建的空间大小 OR 元素个数
+v.capacity();           //容器容量，是预留空间并没有实际创建  
 swap(a,b);					//交换两个元素的位置如:swap(v[0],v[1]);  
 v.insert(place,element);  
 v.insert(place,n,element);	//在place（迭代器）位插入n个元素  
 v[0];     //访问
 v.at[0];  //访问,越界时更安全
+vec.erase(remove(vec.begin(),vec.end(),val), vec.end());  //删除某个特定值val,remove是将其移到最后
+vec.erase(it);                                            //*it=val,删除某个迭代器
 
 
 4.集合set(没有重复元素)://主要用于查询元素
