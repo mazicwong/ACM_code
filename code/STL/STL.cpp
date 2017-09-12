@@ -66,7 +66,7 @@ vec.erase(it);                                            //*it=val,删除某个
 
 4.集合set(没有重复元素)://主要用于查询元素
 创建:
-set<int> s;				      //创建整型集合:s  
+set<int> s;				      //创建整型集合:s
 set<int,less<int> > st1;      //降序排列
 set<int,greater<int> > st2;   //升序排列
 
@@ -222,7 +222,6 @@ int len = unique(mp,mp+n)-mp;
 //下面归入位运算
 13. lowbit hdu1196(find the lowest bit)
 lowbit: 返回2^t  (t为从右往左第一次出现1的位置)
-int lowbit(int x)
-{
+int lowbit(int x) {
 	return x&(-x);
 }
