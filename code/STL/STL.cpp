@@ -9,21 +9,25 @@ kdtree    hdu 5992
 
 
 
-1.stringstream字符流，和string类型:
-//string类具有的优点：可以直接用四则运算符和关系运算符，简化了字符串类型的操作。
-
+1.stringstream字符流,string类型:
+//string优点:可以直接用四则运算符和关系运算符
 string str1="22",str2="11";  
 str1+=str2;                 //类似于strcat
-int length=str1.length();   //类似于strlen,也可以用string.size();
-bool judge=str1>str2;       //类类似于strcmp
+int len=str1.length();      //类似于strlen,也可以用string.size();
+bool flag=str1>str2;        //类似于strcmp
+std::ios::sync_with_stdio(false);
+while(getline(cin,str)){    //输入一行,然后用stringstream创建字符串流(很慢!慎用)
+    stringstream ss(str);
+    while(ss>>x) sum+=x;
+}
 
 
 
-2.模板：
+2.模板template:
 模板是为了，使类或者函数具有通用性，不仅限于一种数据类型或者一种成员结构。
 现定义一个可以任意交换类型的模板（注意模板只能在全局或者命名空间内定义，不可以在main函数或者自定义函数内定义。）
 
-template<class &T>    //class为固定关键字，也可以用等效的typename.  
+template<class &T>    //class为固定关键字,也可以用等效的typename.(紫书P106)
 void swap1(T &a,T &b){
     T tmp;
     tmp=a;
@@ -33,7 +37,7 @@ void swap1(T &a,T &b){
 
 
 
-3. 容器vector：
+3. 容器vector:
 创建:
 vector<int> v;
 vector<int> v(10);			           //创建一个前十个元素为int的容器
@@ -42,17 +46,20 @@ vector<string> v1(v2);		           //对于已经存在的v2创建一个v1副本
 vector<int> G[maxn];                   //建图,邻接表
 
 基本操作:
+sort(vec.begin(),vec.end());
 v.push_back(a);         //压入元素a到末端
 v.pop_back();           //弹出最后一个元素
 v.begin();              //容器的起始位置
 v.end();                //容器最后一个位置
 v.empty();              //返回是否容器为空
 v.clear();              //清空容器
-v.erase(m);             //删除迭代器m处的数据，并返回下一个数据的地址(注意循环中最好用it=vec.erase(it))
+v.erase(it);            //删除迭代器it处的数据，并返回下一个数据的地址(注意'循环'中最好用it=vec.erase(it))
 v.erase(m,n);           //删除m到n之间的数据，并返回下一个数据的地址
-v.front();v.back();     //返回第一个元素(最后一个元素,但不判断是否存在)
+v.front();v.back();     //返回第一个|最后一个元素(但不判断是否存在)一般用v[0],v[n-1]
 v2.assign(8,1);         //重新给vec2赋值，8个成员的初始值都为1 
-v.reserve(100);v.resize(101);    //resize已经创建空间如果再v.push_back();空间就会到101，而reserve只是预留空间并没有真正创建，v.push_back();只是在第1位  
+v.resize(n);            //用于改变大小,v只保留[0~n)的元素
+v.reserve(100);         //reserve只是预留空间并没有真正创建，v.push_back();只是在第1位  
+v.resize(101);          //resize已经创建空间如果再v.push_back();空间就会到101
 v.size();               //已经创建的空间大小 OR 元素个数
 v.capacity();           //容器容量，是预留空间并没有实际创建  
 swap(a,b);					//交换两个元素的位置如:swap(v[0],v[1]);  
@@ -73,8 +80,11 @@ set<int,greater<int> > st2;   //升序排列
 基本操作:
 s.insert(a);		    //插入元素a,并会自动排序,默认升序
 s.size();				//返回元素个数
+s.empty();
 s.find(a);              //返回元素的下标，没找到的话返回s.end()
 s.erase(s.find(a))      //删除元素a
+s.count(a);             //元素个数
+s.lower_bound();        //lower_bound,upper_bound都可以用
 copy(s.begin(), s.end(), ostream_iterator<string>(cout, "\n"));//#include<iterator>中的函数：输出全部集合中的元素，并在每个元素后面接换行符
 
 逻辑操作:
@@ -147,9 +157,9 @@ stack<int> st;	//在是默认以deque为容器的
 基础操作:
 st.push(x);
 st.pop(); 
+st.top();		//取栈顶  
 st.empty();		//是否为空  
 st.size();		//元素个数  
-st.top();		//判断是否为栈顶元素  
 
 
 7.队列queue:
@@ -159,17 +169,23 @@ queue<int> que;
 基本操作:
 que.push(x);	//加入队列顶部  
 que.pop();		//弹出队列里第一个元素  
-que.back();		//队列最后一个元素  
 que.front();	//队列第一个元素  
+que.back();		//队列最后一个元素  
 que.size();		//队列元素个数  
 que.empty();	//队列是否为空
 
 
 
-8.优先队列priority_queue:
+8.优先队列priority_queue:(紫书P119)
 priority_queue<int,vector<int>,less<int>> pque;		//默认容器为vector,其中less算子，表示小的先出队  
 priority_queue<int,vector<int>,greater<int>> pque;	//大的先出队  
-//优先队列与队列相比，只是按照指定的算子将队列内部排序，让后在操作排序后的栈顶元素
+
+priority_queue<int,vector<int>, cmp> pq;
+struct cmp{
+    bool operator() (const int a, const int b) const{
+        return a%10 > b%10;
+    }
+}
 
 
 9.deque双端队列
@@ -214,9 +230,9 @@ while(m--)
 
 12.unique:从序列中删除所有相邻的重复元素
 数组去重:
-int mp[N];
-sort(mp,mp+n);
-int len = unique(mp,mp+n)-mp;
+int arr[N];
+sort(arr,arr+n);
+int len = unique(arr,arr+n)-arr;
 
 
 //下面归入位运算
@@ -225,3 +241,33 @@ lowbit: 返回2^t  (t为从右往左第一次出现1的位置)
 int lowbit(int x) {
 	return x&(-x);
 }
+
+
+14. struct
+构造函数:
+struct point{
+    int x,y;
+    point(int x=0,int y=0):x(x),y(y){};
+}
+
+重载:
+point operator + (const point& A,const point& B){
+    return point(A.x+B.x,A.y+B.y);
+}
+
+
+15. rand (紫书P121)
+srand(time(NULL));     //在程序开头只用一次,初始化随机数种子
+rand();
+rand()%n;              //获取n以内整数
+rand()*1.0/100;
+
+
+
+16. 技巧
+传引用,不要用返回
+void fill(vector<int>& v,int cnt)
+
+
+
+
