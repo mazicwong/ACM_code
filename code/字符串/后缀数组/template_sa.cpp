@@ -1,0 +1,286 @@
+/************************************************ 
+数据结构：后缀数组(Suffix_Array); 
+ 
+子串: 
+字符串S的子串r[i..j]，i≤j，表示r串中从i到j这一段， 
+也就是顺次排列r[i],r[i+1],...,r[j]形成的字符串; 
+后缀： 
+后缀是指从某个位置i开始到整个串末尾结束的一个特殊子串; 
+字符串r的从第i个字符开始的后缀表示为Suffix(i),也就是Suffix(i)=r[i...len(r)]; 
+ 
+后缀数组SA: 
+后缀数组保存的是一个字符串的所有后缀的排序结果; 
+其中SA[i]保存的是字符串所有的后缀中第i小的后缀的开头位置; 
+名次数组Rank： 
+名次数组Rank[i]保存的是后缀i在所有后缀中从小到大排列的“名次”; 
+后缀数组是"排第几的是谁",名次数组是"排第几",即后缀数组和名次数组为互逆运算; 
+ 
+(1)倍增算法: 
+用倍增的方法对每个字符开始的长度为2^k的子字符串进行排序，求出排名，即rank值。 
+k从0开始，每次加1，当2^k大于n以后，每个字符开始的长度为2^k的子字符串便相当于所有的后缀。 
+并且这些子字符串都一定已经比较出大小，即rank值中没有相同的值，那么此时的rank值就是最后的结果。 
+每一次排序都利用上次长度为2^k-1的字符串的rank值， 
+那么长度为2^k的字符串就可以用两个长度为2^k-1的字符串的排名作为关键字表示， 
+然后进行基数排序，便得出了长度为2^k的字符串的rank值。 
+ 
+(2)DC3算法： 
+①先将后缀分成两部分，然后对第一部分的后缀排序; 
+②利用①的结果，对第二部分的后缀排序; 
+③将①和②的结果合并，即完成对所有后缀排序; 
+ 
+时间复杂度： 
+倍增算法的时间复杂度为O(nlogn),DC3算法的时间复杂度为O(n); 
+从常数上看，DC3算法的常数要比倍增算法大; 
+ 
+空间复杂度： 
+倍增算法和DC3算法的空间复杂度都是O(n); 
+倍增算法所需数组总大小为6n,DC3算法所需数组总大小为10n; 
+ 
+RMQ(Range Minimum/Maximum Query)问题： 
+对于长度为n的数列A，回答若干询问RMQ(A,i,j)(i,j<=n)， 
+返回数列A中下标在i,j里的最小(大）值， 
+也就是说，RMQ问题是指求区间最值的问题。 
+ 
+LCA(Least Common Ancestors)最近公共祖先问题： 
+对于有根树T的两个结点u、v， 
+最近公共祖先LCA(T,u,v）表示一个结点x， 
+满足x是u、v的祖先且x的深度尽可能大。 
+另一种理解方式是把T理解为一个无向无环图， 
+而LCA(T,u,v）即u到v的最短路上深度最小的点。 
+ 
+RMQ标准算法： 
+先规约成LCA(Lowest Common Ancestor),再规约成约束RMQ，O(n)-O(q); 
+首先根据原数列，建立笛卡尔树， 
+从而将问题在线性时间内规约为LCA问题; 
+LCA问题可以在线性时间内规约为约束RMQ， 
+也就是数列中任意两个相邻的数的差都是+1或-1的RMQ问题; 
+约束RMQ有O(n)-O(1)的在线解法，故整个算法的时间复杂度为O(n)-O(1); 
+ 
+height数组： 
+定义height[i]=suffix(sa[i-1])和suffix(sa[i])的最长公共前缀， 
+也就是排名相邻的两个后缀的最长公共前缀; 
+ 
+那么对于j和k，不妨设rank[j]<rank[k],则有以下性质： 
+suffix(j)和suffix(k)的最长公共前缀为: 
+height[rank[j]+1],height[rank[j]+2],height[rank[j]+3],…,height[rank[k]]中的最小值; 
+*************************************************/  
+
+
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include <cmath>
+#include <algorithm>
+#include <map>
+#include <vector>
+#include <queue>
+#include <stack>
+#include <set>
+using namespace std;
+typedef long long ll;
+//rank[i] 第i个后缀的排名;
+//sa[i] 排名为i的后缀位置;
+//height[i] 排名为i的后缀与排名为(i-1)的后缀的LCP(相邻排名最长公共前缀)
+
+const int MAXN = 1e5+5;
+int sa[MAXN];
+int rank[MAXN],height[MAXN];
+int t1[MAXN],t2[MAXN],c[MAXN];//求SA数组需要的中间变量,不需要赋值
+//要排序的母串放在s数组中,从s[0]到s[n-1],长度为n,且最大值小于m,
+//除s[n-1]外的所有s[i]都大于0,r[n-1]=0
+//函数结束以后结果放在sa数组中
+
+
+
+/**************倍增算法**************************/
+bool cmp(int *str,int a,int b,int l)
+{
+    return str[a]==str[b] && str[a+l]==str[b+l];
+}
+void build_sa(int str[],int n,int m)
+{
+    n++;
+    int i,j,p,*x=t1,*y=t2;
+    //第一轮基数排序,如果s的最大值很大,可改为快速排序
+    for(i=0;i<m;i++) c[i]=0;
+    for(i=0;i<n;i++) c[x[i]=str[i]]++;
+    for(i=1;i<m;i++) c[i]+=c[i-1];
+    for(i=n-1;i>=0;i--) sa[--c[x[i]]]=i;
+    for(j=1;j<=n;j<<=1)
+    {
+        p=0;
+        //直接利用sa数组排序第二关键字
+        for(i=n-j;i<n;i++) y[p++]=i;
+        for(i=0;i<n;i++) if(sa[i]>=j) y[p++]=sa[i]-j;
+        for(i=0;i<m;i++) c[i]=0;
+        for(i=0;i<n;i++) c[x[y[i]]]++;
+        for(i=1;i<m;i++) c[i]+=c[i-1];
+        for(i=n-1;i>=0;i--) sa[--c[x[y[i]]]]=y[i];
+        //根据sa和x数组计算新的x数组
+        swap(x,y);
+        p=1;x[sa[0]]=0;
+        for(i=1;i<n;i++)
+            x[sa[i]]=cmp(y,sa[i-1],sa[i],j)?p-1:p++;
+        if(p>=n)break;
+        m=p;//下次基数排序的最大值
+    }
+    //计算height[]
+    int k=0;
+    n--;
+    for(i=0; i<=n; i++) rank[sa[i]]=i;  
+    for(i=0; i<n; i++)  
+    {
+        if(k) k--;
+        j=sa[rank[i]-1];
+        while(str[i+k]==str[j+k]) k++;
+        height[rank[i]]=k;
+    }
+}
+/**************倍增算法**************************/
+
+
+
+/***************DC3算法**************************/  
+#define F(x) ((x)/3+((x)%3==1?0:tb))  
+#define G(x) ((x)<tb?(x)*3+1:((x)-tb)*3+2)  
+  
+int wa[N],wb[N],wv[N],_ws[N];  
+  
+int c0(int *r,int a,int b)  
+{  
+    return r[a]==r[b]&&r[a+1]==r[b+1]&&r[a+2]==r[b+2];  
+}  
+  
+int c12(int k,int *r,int a,int b)  
+{  
+    if(k==2)  
+        return r[a]<r[b]||r[a]==r[b]&&c12(1,r,a+1,b+1);  
+    else  
+        return r[a]<r[b]||r[a]==r[b]&&wv[a+1]<wv[b+1];  
+}  
+  
+void sort(int *r,int *a,int *b,int n,int m)  
+{  
+    for(int i=0; i<n; i++)  
+        wv[i]=r[a[i]];  
+    for(int i=0; i<m; i++)  
+        _ws[i]=0;  
+    for(int i=0; i<n; i++)  
+        _ws[wv[i]]++;  
+    for(int i=1; i<m; i++)  
+        _ws[i]+=_ws[i-1];  
+    for(int i=n-1; i>=0; i--)  
+        b[--_ws[wv[i]]]=a[i];  
+    return;  
+}  
+  
+void dc3(int *r,int *sa,int n,int m)  
+{  
+    int *rn=r+n,*san=sa+n,ta=0,tb=(n+1)/3,tbc=0,p;  
+    r[n]=r[n+1]=0;  
+    for(int i=0; i<n; i++)  
+    {  
+        if(i%3!=0)  
+            wa[tbc++]=i;  
+    }  
+    sort(r+2,wa,wb,tbc,m);  
+    sort(r+1,wb,wa,tbc,m);  
+    sort(r,wa,wb,tbc,m);  
+    p=1,rn[F(wb[0])]=0;  
+    for(int i=1; i<tbc; i++)  
+    {  
+        rn[F(wb[i])]=c0(r,wb[i-1],wb[i])?p-1:p++;  
+    }  
+    if(p<tbc)  
+        dc3(rn,san,tbc,p);  
+    else  
+        for(int i=0; i<tbc; i++)  
+            san[rn[i]]=i;  
+    for(int i=0; i<tbc; i++)  
+    {  
+        if(san[i]<tb)  
+            wb[ta++]=san[i]*3;  
+    }  
+    if(n%3==1)  
+        wb[ta++]=n-1;  
+    sort(r,wb,wa,ta,m);  
+    for(int i=0; i<tbc; i++)  
+        wv[wb[i]=G(san[i])]=i;  
+    int i,j;  
+    for(i=0,j=0,p=0; i<ta && j<tbc; p++)  
+    {  
+        sa[p]=c12(wb[j]%3,r,wa[i],wb[j])?wa[i++]:wb[j++];  
+    }  
+    for(; i<ta; p++)  
+        sa[p]=wa[i++];  
+    for(; j<tbc; p++)  
+        sa[p]=wb[j++];  
+    return;  
+}
+/***************DC3算法**************************/  
+
+
+int RMQ[MAXN];
+int mm[MAXN];
+int best[20][MAXN];
+void initRMQ(int n)
+{
+    mm[0]=-1;
+    for(int i=1;i<=n;i++)
+        mm[i]=((i&(i-1))==0)?mm[i-1]+1:mm[i-1];
+    for(int i=1;i<=n;i++) best[0][i]=i;
+    for(int i=1;i<=mm[n];i++)
+        for(int j=1;j+(1<<i)-1<=n;j++)
+        {
+            int a=best[i-1][j];
+                int b=best[i-1][j+(1<<(i-1))];
+            if(RMQ[a]<RMQ[b]) best[i][j]=a;
+            else best[i][j]=b;
+        }
+} 
+int askRMQ(int a,int b)
+{
+    int t;
+    t=mm[b-a+1];
+    b-=(1<<t)-1;
+    a=best[t][a];b=best[t][b];
+    return RMQ[a]<RMQ[b]?a:b;
+}
+int lcp(int a,int b)
+{
+    a=rank[a];b=rank[b];
+    if(a>b)swap(a,b);
+    return height[askRMQ(a+1,b)];
+}
+
+
+char str[MAXN];
+int r[MAXN];
+int main()//hdu6194 哪些子串在字符串中出现k次
+{
+    freopen("in","r",stdin);
+    int k;
+    int t;cin>>t;
+    while(t--)
+    {
+        scanf("%d%s",&k,&str);
+        int n =strlen(str);
+        for (int i=0;i<n;i++)
+            r[i]=str[i]-'a'+1;
+        r[n]=0;
+        build_sa(r,n,30);            //得到sa,rank,height数组
+        initRMQ(n+1);                //RMQ预处理区间最长公共前缀
+        long long ans = 0;
+        for (int i=1;i+k-1<=n;i++)   //枚举区间
+        {
+            ans += lcp(i,i+l-1);
+            if (i>1) ans -= lcp(i-1,i+k-1);
+            if (i+k<=n) ans -= lcp(i,i+k);
+            if (i>1 && i+k<=n) ans +=lcp(i-1,i+k);
+        }
+        printf("%I64d\n",ans);
+    }
+    return 0;
+}
