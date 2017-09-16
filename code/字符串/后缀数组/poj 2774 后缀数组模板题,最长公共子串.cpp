@@ -1,8 +1,8 @@
 /*************************************************************************
-	> File Name: poj1743.cpp
+	> File Name: poj2774.cpp
 	> Author: mazicwong
 	> Mail: mazicwong@gmail.com
-	> Created Time: 2017年09月14日 星期四 18时23分40秒
+	> Created Time: 2017年09月15日 星期五 20时20分29秒
  ************************************************************************/
 
 #include <iostream>
@@ -18,29 +18,24 @@
 #include <stack>
 #include <set>
 using namespace std;
-/*
- * 不可重叠最长重复子串
- */
 
-
-
-const int MAXN = 1e5+5;
-
+const int MAXN = 2e5+5;//开大一倍,因为要存双份
 int sa[MAXN];
 int rank[MAXN],height[MAXN];
 int t1[MAXN],t2[MAXN],c[MAXN];//求SA数组需要的中间变量,不需要赋值
-//要排序的母串放在s数组中,从s[0]到s[n-1],长度为n,且最大值小于m,
-//除s[n-1]外的所有s[i]都大于0,r[n-1]=0
+//要排序的母串放在str数组中,从str[0]到str[n-1],长度为n,且最大值小于m,
+//除str[n]外的所有str[i]都大于0,r[n]=0
 //函数结束以后结果放在sa数组中
 
-//rank[i] 第i个后缀的排名; sa[i] 排名为i的后缀位置;
-//height[i] 排名为i的后缀与排名为(i-1)的后缀的LCP(相邻排名最长公共前缀)
+
+/**************倍增算法**************************/
 bool cmp(int *str,int a,int b,int l)
 {
     return str[a]==str[b] && str[a+l]==str[b+l];
 }
 void build_sa(int str[],int n,int m)
 {
+    n++;
     int i,j,p,*x=t1,*y=t2;
     //第一轮基数排序,如果s的最大值很大,可改为快速排序
     for(i=0;i<m;i++) c[i]=0;
@@ -65,58 +60,52 @@ void build_sa(int str[],int n,int m)
         if(p>=n)break;
         m=p;//下次基数排序的最大值
     }
+    //计算height[]
+    int k=0;
+    n--;
+    for(i=0;i<=n;i++) rank[sa[i]]=i;  
+    for(i=0;i<n;i++)  
+    {
+        if(k) k--;
+        j=sa[rank[i]-1];
+        while(str[i+k]==str[j+k]) k++;
+        height[rank[i]]=k;
+    }
 }
+/**************倍增算法**************************/
 
-int RMQ[MAXN];
-int mm[MAXN];
-int best[20][MAXN];
-void initRMQ(int n)
-{
-    mm[0]=-1;
-    for(int i=1;i<=n;i++)
-        mm[i]=((i&(i-1))==0)?mm[i-1]+1:mm[i-1];
-    for(int i=1;i<=n;i++) best[0][i]=i;
-    for(int i=1;i<=mm[n];i++)
-        for(int j=1;j+(1<<i)-1<=n;j++)
-        {
-            int a=best[i-1][j];
-                int b=best[i-1][j+(1<<(i-1))];
-            if(RMQ[a]<RMQ[b]) best[i][j]=a;
-            else best[i][j]=b;
-        }
-}
-int askRMQ(int a,int b)
-{
-    int t;
-    t=mm[b-a+1];
-    b-=(1<<t)-1;
-    a=best[t][a];b=best[t][b];
-    return RMQ[a]<RMQ[b]?a:b;
-}
-int lcp(int a,int b)
-{
-    a=rank[a];b=rank[b];
-    if(a>b)swap(a,b);
-    return height[askRMQ(a+1,b)];
-}
-
-
-int a[maxn];
+char str[MAXN];
+char str1[MAXN];
+int r[MAXN];
 int main()
 {
-    freopen("in","r",stdin);
-    int n;
-    while(scanf("%d",&n) && n)
+    freopen("in1","r",stdin);
+    while(scanf("%s",str)!=EOF)
     {
-        for (int i=0;i<n;i++)
-            scanf("%d",&a[i]);
-        for (int i=n-1;i>=1;i--)
-            a[i]=a[i]-a[i-1];
-        n--;
-        Suffix();
+        scanf("%s",str1);
 
+        int n=0;
+        int len = strlen(str);
+        for (int i=0;i<len;i++)
+            r[n++]=str[i]-'a'+1;
+        r[n++]=28;
+        len = strlen(str1);
+        for (int i=0;i<len;i++)
+            r[n++]=str1[i]-'a'+1;
+        r[n]=0;
+        build_sa(r,n+1,30);
+        int ans = 0;
+        len = strlen(str);
 
+        for (int i=2;i<n;i++)
+        if (height[i]>ans)
+        {
+            if (0<=sa[i-1] && sa[i-1]<len && len<sa[i])
+            ans = height[i];
+            if (0<=sa[i] && sa[i]<len && len<sa[i-1])
+            ans = height[i];
+        }
+        printf("%d\n",ans);
     }
-    
     return 0;
 }
