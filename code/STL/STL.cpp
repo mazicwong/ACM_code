@@ -256,6 +256,10 @@ point operator + (const point& A,const point& B){
 }
 
 
+
+
+
+
 15. rand (紫书P121)
 srand(time(NULL));     //在程序开头只用一次,初始化随机数种子
 rand();
@@ -265,9 +269,20 @@ rand()*1.0/100;
 
 
 16. 技巧
+
 传引用,不要用返回
 void fill(vector<int>& v,int cnt)
 
+二分(非递归,紫书P228)
+//返回大于等于v的第一个,不存在则返回应该插入的位置(即lower_bound)
+int bs(int l,int r,int v){
+    while(l<r){
+        int mid = l+(r-l)/2;
+        if (v<=a[mid]) r=mid;
+        else l=mid+1;
+    }
+    return l;
+}
 
 
 
