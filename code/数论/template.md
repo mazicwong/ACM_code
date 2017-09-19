@@ -115,6 +115,13 @@ ll mod_pow(ll x, ll n,ll mod)//x^n%mod
     }
     return res;
 }
+//北大版本2,还没调试过
+const int mod = 998244353;
+int pow(int a,int b){
+    int res=1;
+    for (int i=1;i<=n;i<<=1,a=1LL*a*a%mo) if(b&i) res=1LL*res*a%mo;
+    return res;
+}
 ```
 
 
