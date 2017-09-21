@@ -278,11 +278,22 @@ void fill(vector<int>& v,int cnt)
 int bs(int l,int r,int v){
     while(l<r){
         int mid = l+(r-l)/2;
-        if (v<=a[mid]) r=mid;
-        else l=mid+1;
+        if (v<=a[mid]) r=mid; //v<=a[mid]
+        else l=mid+1;         //v>a[mid],则不可能取到刚好mid那里了
     }
     return l;
 }
 
 
+template<class Type> 
+int bs(Type a[], const Type& x, int l, int r)
+{
+    while (l<=r){ 
+        int mid = (l+r)/2;
+        if (x==a[mid]) return m;
+        if (x<a[mid]) r = m-1;
+        else l = m+1;
+    }
+    return -1;
+} 
 

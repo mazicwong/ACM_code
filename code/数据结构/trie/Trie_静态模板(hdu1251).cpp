@@ -20,16 +20,17 @@
 #pragma comment(linker, "/STACK:102400000,102400000")
 using namespace std;
 /*
- * hdu1251 Trie模板题(动态)
+ * hdu1251 Trie模板题(静态)
  * 给一堆串组成的字典,
  * 然后给一些查询,问一个子串是多少个串的前缀
+ *
  * 注意字典和查询中间用空行分开(这里用gets判断第一个是不是'\0'就行了)
  * gets: 可以读取一个空行,每一行最后的'\n'会转换成'\0'
  */
 
 const int maxn = 1e6+5;//10层
 int Trie[maxn][26];
-int num[maxn]={0}; //节点属性值,根据题意来定,这里是以该串为前缀单词数
+int num[maxn]={0}; //节点属性值,根据题意来定,这题是以该串为前缀单词数
 int tot = 1;//节点个数
 
 void insert(char *str)
@@ -39,10 +40,10 @@ void insert(char *str)
     for (int i=0;i<len;i++)
     {
         int id = str[i]-'a';
-        if (Trie[p][id]==0)
-            Trie[p][id]=tot++;
-        p=Trie[p][id];
-        num[p]++;//节点属性值
+        if (Trie[p][id]==0)     //节点不存在
+            Trie[p][id]=tot++; 
+        p=Trie[p][id];          //往下走
+        num[p]++;               //节点属性值
     }
 }
 

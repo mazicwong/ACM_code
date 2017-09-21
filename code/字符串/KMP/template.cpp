@@ -3,6 +3,7 @@
 /*********************KMP 模式串匹配**************************/
 //http://www.cnblogs.com/zhangtianq/p/5839909.html
 // O(n+m)
+// O(m)预处理,O(n)匹配
 T[]: 母串
 P[]: 模式串
 next[]: 除当前字符外的最长相同前缀后缀(位数要比P[]多一位,next[0]=-1)
@@ -21,7 +22,9 @@ kmp思想: 对模式串P预处理计算出next[]数组;查找时,i只扫一遍,当T[i]与P[j]失配时,P向
 注意:下面两套模板是可以混搭的,一套是自己总结的(容易理解),一套是kuangbin大神的(比赛敲起来块)
 最好用1的.
 
-void getNext(char *P,int *next)
+
+int next[maxm];
+void getNext(char *P)
 {//next从1开始,字符串从0开始
     int pp = strlen(P);
     next[0]=-1;
@@ -42,7 +45,7 @@ void getNext(char *P,int *next)
     }
 }
 
-int kmp(char *T,char *P,int *next)
+int kmp(char *T,char *P)
 {//返回模式串P在主串T中首次出现的位置,从0开始
     int tt=strlen(T),pp=strlen(P);
     int i=0,j=0;
@@ -96,7 +99,7 @@ int kmp_count()
 char T[1000];//母串
 char P[100];//模板串  
 int next[101];//失配串(位数比模板串多1)
-void getNext(char *P,int *next)
+void getNext(char *P)
 {//next从1开始,字符串从0开始
     int pp = strlen(P);
     next[0]=-1;
@@ -108,22 +111,22 @@ void getNext(char *P,int *next)
         next[j]=k;
     }
 }
-void kmp(char *T, char *P, int *next) //(未验证)
+void kmp(char *T, char *P) //(未验证)
 {
-	int tt = strlen(T), pp = strlen(P);
-	int j = -1;
+	int tt=strlen(T),pp=strlen(P);
+	int j=-1;
 	for (int i = 0; i < tt; i++)
 	{
-		while (j!=-1 && T[i] != P[j]) j = next[j];
-		if (T[i] == P[j]) j++;
-		if (j == pp) printf("%d\n", i - pp + 1);//就算j到pp了，也用f[pp]继续匹配  
+		while (j!=-1 && T[i]!=P[j]) j=next[j];
+		if (T[i]==P[j]) j++;
+		if (j==pp) printf("%d\n", i-pp+1);//就算j到pp了，也用next[pp]继续匹配  
 	}
 }
 int kmp_count()
 {//返回模式串在主串T中出现的次数(法2,更块,kuangbin模板)
     int tt=strlen(T),pp=strlen(P);
     int i=0,j=0;
-    int ans = 0;
+    int ans=0;
     while(i<tt)
     {
         while(j!=-1 && T[i]!=P[j]) j=next[j];
