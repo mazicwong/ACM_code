@@ -3,10 +3,8 @@ http://www.cnblogs.com/shanyr/p/5745807.html
 http://blog.csdn.net/qiweigo/article/details/43566227
 本文结合小紫书总结STL在ACM竞赛中的使用
 
-manacher
-splay
-kdtree    hdu 5992
 
+std::ios::sync_with_stdio(false);
 
 
 1.stringstream字符流,string类型:
@@ -15,11 +13,16 @@ string str1="22",str2="11";
 str1+=str2;                 //类似于strcat
 int len=str1.length();      //类似于strlen,也可以用string.size();
 bool flag=str1>str2;        //类似于strcmp
-std::ios::sync_with_stdio(false);
 while(getline(cin,str)){    //输入一行,然后用stringstream创建字符串流(很慢!慎用)
     stringstream ss(str);
     while(ss>>x) sum+=x;
 }
+/***string与char str[]转化***/
+string ss; char str1[],str2[];
+const char* pp=ss.c_str(); //string转到char
+strcpy(str2,str1);         //char[]转到char[]
+/***string与char str[]转化***/
+
 
 
 
@@ -116,8 +119,9 @@ st.erase(st.find(a))    //从st中删除数a
 
 5.映射map:
 创建:
-map<string,int> mp;
+map<string,int> mp; //const char* pp = it->first.c_str();
 map<string,int>::iterator it = mp.begin();
+
 
 基本操作:
 mp.insert(pair<string,int>("month",1)); //插入一个元素
@@ -127,6 +131,8 @@ mp.erase(it);                           //删除一个元素,注意用find后it�
 mp.count("month");                      //返回指定元素出现的次数,效率:logn
 for(it=mp.begin();it!=mp.end();it++) {it->begin;  it->second;}
 
+常用技巧:
+map<int,vector<int> >mp;
 
 begin()          返回指向map头部的迭代器
 end()            返回指向map末尾的迭代器
@@ -176,17 +182,24 @@ que.empty();	//队列是否为空
 
 
 
-8.优先队列priority_queue:(紫书P119)
-priority_queue<int,vector<int>,less<int>> pque;		//默认容器为vector,其中less算子，表示小的先出队  
-priority_queue<int,vector<int>,greater<int>> pque;	//大的先出队  
+8.priority_queue://解决多路归并问题(紫书P119,蓝书P188)
+priority_queue<int,vector<int>,less<int> > pque;		//默认容器为vector,其中less算子，表示小的先出队  
+priority_queue<int,vector<int>,greater<int> > pque;	//大的先出队  
 
-priority_queue<int,vector<int>, cmp> pq;
 struct cmp{
     bool operator() (const int a, const int b) const{
         return a%10 > b%10;
     }
-}
+};
+priority_queue<int,vector<int>, cmp> pq;
 
+struct item{
+    int num,period,time;
+    bool operator < (const item& a) const{
+        return time>a.time || (time==a.time && num>a.num)
+    }
+};
+priority_queue<item> pq;
 
 9.deque双端队列
 #include<queue>
@@ -256,11 +269,13 @@ point operator + (const point& A,const point& B){
 }
 
 
+15. pair
+vector<pair<int,int> > vec;
+vec[2]=make_pair(2,3);
 
 
 
-
-15. rand (紫书P121)
+16. rand (紫书P121)
 srand(time(NULL));     //在程序开头只用一次,初始化随机数种子
 rand();
 rand()%n;              //获取n以内整数
@@ -268,7 +283,7 @@ rand()*1.0/100;
 
 
 
-16. 技巧
+17. 技巧
 
 传引用,不要用返回
 void fill(vector<int>& v,int cnt)
