@@ -45,23 +45,16 @@ void getNext(char *P)
     }
 }
 
-int kmp(char *T,char *P)
-{//返回模式串P在主串T中首次出现的位置,从0开始
+int kmp(char *T,char *P)//返回P在T中首次出现的位置,从0开始
+{
     int tt=strlen(T),pp=strlen(P);
     int i=0,j=0;
     while(i<tt && j<pp)
     {
         //如果j=-1，或者当前字符匹配成功（即T[i] == P[j]）,都令i++,j++
-        if (j==-1 || T[i]==P[j])
-        {
-            i++;
-            j++;
-        }
+        if (j==-1 || T[i]==P[j]) i++,j++;
         //如果j!=-1，且当前字符匹配失败（即T[i] != P[j]）,则令i不变,j=next[j]
-        else
-        {
-            j=next[j];
-        }
+        else j=next[j];
     }
     if (j==pp) return i-j;
     else return -1;
@@ -73,15 +66,8 @@ int kmp_count()
     int ans=0;
     while(i<tt)
     {
-        if (j==-1 || T[i]==P[j])
-        {
-            i++;
-            j++;
-        }
-        else
-        {
-            j=nxt[j];
-        }
+        if (j==-1 || T[i]==P[j]) i++,j++;
+        else j=nxt[j];
         if (j>=pp)
         {
             ans++;
@@ -111,11 +97,11 @@ void getNext(char *P)
         next[j]=k;
     }
 }
-void kmp(char *T, char *P) //(未验证)
+void kmp(char *T, char *P) //输出所有匹配的位置
 {
 	int tt=strlen(T),pp=strlen(P);
 	int j=-1;
-	for (int i = 0; i < tt; i++)
+	for (int i=0;i<tt;i++)
 	{
 		while (j!=-1 && T[i]!=P[j]) j=next[j];
 		if (T[i]==P[j]) j++;
