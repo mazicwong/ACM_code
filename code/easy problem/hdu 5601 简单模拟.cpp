@@ -28,5 +28,4 @@ int main()
 		}
 		printf("%s\n", cnt & 1 ? "NO" : "YES");
 	}
-	return 0;
 }

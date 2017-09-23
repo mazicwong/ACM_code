@@ -43,7 +43,5 @@ int main()
 			scanf("%d", &x[i]);
 		solve();
 	}
-
-
 	return 0;
 }
