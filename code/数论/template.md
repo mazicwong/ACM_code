@@ -152,12 +152,11 @@ x      prime(x)
 
 ```cpp
 ll prime[maxn];
-ll isprime[maxn];
 ll tot=0;
+bool isprime[maxn];
 void getprime()
 {
-    for (int i=2;i<maxn;i++)
-        isprime[i]=1;
+    bool(isprime,true,sizeof(isprime));
     for (int i=2;i<maxn;i++)
     {
         if (isprime[i])
