@@ -52,7 +52,9 @@ http://www.cnblogs.com/linyujun/category/784324.html
 
 ***
 卢卡斯定理:(Lucas)组合数取模
->模运算求二项式系数C(n,r)%p,
+//模运算求二项式系数C(n,r)%p,
+//其中p是素数
+//C(n,r) = C(n-1,r)+C(n-1,r-1)
 
 ```cpp
 ll mod_pow(ll x,ll n,ll mod){//快速幂
@@ -64,8 +66,8 @@ ll mod_pow(ll x,ll n,ll mod){//快速幂
     }
     return res;
 }
-ll fac[100005];  
-ll Get_Fact(ll p){//初始化
+ll fac[100005];
+ll getFactor(ll p){//初始化
     fac[0]=1;  
     for(int i=1;i<=p;i++)  
         fac[i]=(fac[i-1]*i)%p;  
@@ -81,6 +83,9 @@ ll Lucas(ll n,ll m,ll p){//Lucas 定理
     }
     return res;
 }
+//use
+getFactor(p);
+Lucas(n,m,p);
 ```
 
 
