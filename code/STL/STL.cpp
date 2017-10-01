@@ -183,7 +183,7 @@ que.empty();	//队列是否为空
 
 
 8.priority_queue://解决多路归并问题(紫书P119,蓝书P188)
-(!其实priority_queue跟multiset大部分功能很像,区别在于set支持随机操作)
+(!其实priority_queue跟multiset大部分功能很像,区别在于set支持随机操作;都可以时,用priority_queue好些,cf865D)
 priority_queue<int,vector<int>,less<int> > pque;    //默认容器为vector,其中less算子，表示大的先出队(默认less)
 priority_queue<int,vector<int>,greater<int> > pque;	//小的先出队  
 pque.top(); pque.pop();   //不用front
