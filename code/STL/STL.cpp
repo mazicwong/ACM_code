@@ -163,9 +163,9 @@ stack<int> st;	//在是默认以deque为容器的
 基础操作:
 st.push(x);
 st.pop(); 
-st.top();		//取栈顶  
-st.empty();		//是否为空  
-st.size();		//元素个数  
+st.top();		//取栈顶
+st.empty();		//是否为空
+st.size();		//元素个数
 
 
 7.队列queue:
@@ -183,8 +183,10 @@ que.empty();	//队列是否为空
 
 
 8.priority_queue://解决多路归并问题(紫书P119,蓝书P188)
-priority_queue<int,vector<int>,less<int> > pque;		//默认容器为vector,其中less算子，表示小的先出队  
-priority_queue<int,vector<int>,greater<int> > pque;	//大的先出队  
+(!其实priority_queue跟multiset大部分功能很像,区别在于set支持随机操作)
+priority_queue<int,vector<int>,less<int> > pque;    //默认容器为vector,其中less算子，表示大的先出队(默认less)
+priority_queue<int,vector<int>,greater<int> > pque;	//小的先出队  
+pque.top(); pque.pop();   //不用front
 
 struct cmp{
     bool operator() (const int a, const int b) const{
@@ -200,6 +202,7 @@ struct item{
     }
 };
 priority_queue<item> pq;
+
 
 9.deque双端队列
 #include<queue>
