@@ -20,6 +20,8 @@ hdu 1698
 	区间查询: 求和
 */
 
+
+
 /*
  * poj3468
  * 区间更新(加),区间查询(求和)
@@ -45,15 +47,14 @@ hdu 1698
 
 typedef long long ll;
 
-inline int L(int l) { return l << 1; }
-inline int R(int r) { return (r << 1) + 1; }
-inline int MID(int l, int r) { return (l + r) >> 1; }
-typedef struct {
-    int left, right;
-    ll value; //节点对应区间和
+inline int L(int l) {return l<<1;}
+inline int R(int r) {return (r<<1)+1;}
+inline int MID(int l, int r) {return (l+r)>>1;}
+struct {
+    int l,r;
+    ll val;   //节点属性值,这里是区间和
     ll lazy;  //该节点对应所有子节点应该加上的值,才不用一直更新到叶子
-}node;
-node tree[maxn<<2]; //tree[1..2^n-1]
+}tree[maxn<<2];     //tree[1..2^n-1]
 int arr[maxn];      //存放初始节点arr[1..n]
 ll sum = 0;         //查询到的和
 
@@ -61,7 +62,7 @@ ll sum = 0;         //查询到的和
 //"创建区间"和"更新区间"最后的递归回溯时向上更新value
 void PushUp(int rt)
 {
-    tree[rt].value = tree[L(rt)].value + tree[R(rt)].value;
+    tree[rt].val = tree[L(rt)].val + tree[R(rt)].val;
 }
 
 
@@ -72,23 +73,22 @@ void PushDown(int rt)
     {
         tree[L(rt)].lazy += tree[rt].lazy;
         tree[R(rt)].lazy += tree[rt].lazy;
-        tree[L(rt)].value += (tree[L(rt)].right-tree[L(rt)].left+1)*tree[rt].lazy;
-        tree[R(rt)].value += (tree[R(rt)].right-tree[R(rt)].left+1)*tree[rt].lazy;
+        tree[L(rt)].val += (tree[L(rt)].r-tree[L(rt)].l+1)*tree[rt].lazy;
+        tree[R(rt)].val += (tree[R(rt)].r-tree[R(rt)].l+1)*tree[rt].lazy;
+
         tree[rt].lazy = 0;
     }
 }
 
 void build(int l, int r, int rt)
 {
-    tree[rt].left = l;
-    tree[rt].right = r;
+    tree[rt].l=l; tree[rt].r=r;
     tree[rt].lazy = 0;
     if (l==r) //找到叶子,赋值
     { 
-        tree[rt].value = arr[l];
+        tree[rt].val = arr[l];
         return;
     }
-
 
     //分治
     int mid = MID(l,r);
@@ -99,24 +99,25 @@ void build(int l, int r, int rt)
     PushUp(rt);
 }
 
-//更新区间(每个点加一个值)
+//区间更新(每个点加一个值)
 void update(int l, int r, int val, int rt)//更新范围[l,r],当前所在的根rt
 {
-    //if (l<=L(rt) && R(rt)<=r) ???
-    if (l<=tree[rt].left && tree[rt].right<=r)//单点更新的话,这里就用等于
+    //if (l<=L(rt) && R(rt)<=r) ??? 因为(tree[rt].l,tree[rt].r)是表示该节点对应的区间范围;而L(rt),R(rt)是他的左右儿子节点
+    //拿root=1举例子就很明显了,(1,n);(2,3);
+    if (l<=tree[rt].l && tree[rt].r<=r)//单点更新的话,这里就用等于
     {
         //这个节点在更新的区间里面,直接算完lazy和value然后退出
         tree[rt].lazy += val;
-        tree[rt].value += (tree[rt].right-tree[rt].left+1)*val;
+        tree[rt].val += (tree[rt].r-tree[rt].l+1)*val;
         return;
     }
 
     PushDown(rt);
-    if (tree[rt].left == tree[rt].right) return;
+    if (tree[rt].l == tree[rt].r) return;
 
 
     //分治
-    int mid = MID(tree[rt].left, tree[rt].right);
+    int mid = MID(tree[rt].l, tree[rt].r);
     if (mid<l) update(l,r,val,R(rt));        //在右子树中
     else if (mid>=r) update(l,r,val,L(rt));  //在左子树中
     else                                     //在左右子树中
@@ -132,18 +133,18 @@ void update(int l, int r, int val, int rt)//更新范围[l,r],当前所在的根rt
 //查询区间(和)
 void query(int l, int r, int rt)//查找的范围[l,r],当前所在根rt
 {
-    if (l<=tree[rt].left && tree[rt].right<=r)
+    if (l<=tree[rt].l && tree[rt].r<=r)
     {
-        sum += tree[rt].value;
+        sum += tree[rt].val;
         return;
     }
 
     PushDown(rt);
-    if (tree[rt].left == tree[rt].right) return;
+    if (tree[rt].l == tree[rt].r) return;
 
 
     //分治
-    int mid = MID(tree[rt].left, tree[rt].right);
+    int mid = MID(tree[rt].l, tree[rt].r);
     if (mid<l) query(l,r,R(rt));
     else if (mid>=r) query(l,r,L(rt));
     else

@@ -21,35 +21,47 @@ inline int R(int r) { return (r << 1) + 1; }
 inline int MID(int l, int r) { return (l + r) >> 1; }
 typedef struct {
     int left, right;
-    int value;//存区间最大值
+    int val;//存区间最大值
 }node;
 node tree[maxn<<2]; //tree[1..2^n-1]
 int arr[maxn];      //存放初始节点arr[1..n]
 int ans = 0;        //查询到的最大值
 
+void PushUp(int rt)
+{
+    //回溯时,对所有祖先节点PushUp赋属性值
+    tree[rt].val = max(tree[L(rt)].val, tree[R(rt)].val);
+}
+
+//初始化树节点,递归至叶子,回溯更新每个节点的值(l,r,val)
+//有些属性自上而下就定完了,有些要先确定儿子的,所以要回溯才确定
 void build(int l, int r, int rt)
 {
+    //l,r只改一次,后面不动了,只动属性值
 	tree[rt].left = l;
 	tree[rt].right = r;
-	if (l==r) //找到叶子,赋值
+	if (l==r) //到叶子了,直接赋属性值
     {
-        tree[rt].value = arr[l];
+        tree[rt].val = arr[l];
         return;
     }
 
+    //分治,二分区间
     int mid = MID(l,r);
     build(l, mid, L(rt));
     build(mid+1, r, R(rt));
-    tree[rt].value = max(tree[L(rt)].value, tree[R(rt)].value);
+
+    //回溯赋属性值
+    PushUp(rt);
 }
 
 
-//更新区间(叶子节点加一个值)
+//更新区间(即更新区间对应节点以及他的所有祖先);祖先在回溯时候更新
 void update(int l, int r, int val, int rt)
 {
     if (l==tree[rt].left && tree[rt].right==r)//找到
     {
-        tree[rt].value = val;
+        tree[rt].val = val;
         return;
 	}
 
@@ -61,7 +73,8 @@ void update(int l, int r, int val, int rt)
         update(l,mid,val,L(rt));
         update(mid+1,r,val,R(rt));
     }
-    tree[rt].value = max(tree[L(rt)].value, tree[R(rt)].value);
+
+    PushUp(rt);
 }
 
 //查询最值(节点的value最大)
@@ -69,7 +82,7 @@ void query(int l, int r, int rt)//查找的范围[l,r],当前所在的根rt
 {
     if (l==tree[rt].left && tree[rt].right==r)//找到区间
     {
-        ans = max(ans,tree[rt].value);
+        ans = max(ans,tree[rt].val);
         return;
     }
     //if (tree[rt].left==tree[rt].right) return;
