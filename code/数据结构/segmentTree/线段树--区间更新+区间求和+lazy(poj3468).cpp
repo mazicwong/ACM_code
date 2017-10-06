@@ -50,9 +50,9 @@ typedef long long ll;
 inline int L(int l) {return l<<1;}
 inline int R(int r) {return (r<<1)+1;}
 inline int MID(int l, int r) {return (l+r)>>1;}
-struct {
+struct node{
     int l,r;
-    ll val;   //节点属性值,这里是区间和
+    ll Sum;   //节点属性值,这里是区间和
     ll lazy;  //该节点对应所有子节点应该加上的值,才不用一直更新到叶子
 }tree[maxn<<2];     //tree[1..2^n-1]
 int arr[maxn];      //存放初始节点arr[1..n]
@@ -60,9 +60,10 @@ ll sum = 0;         //查询到的和
 
 
 //"创建区间"和"更新区间"最后的递归回溯时向上更新value
+//查询就不用了,
 void PushUp(int rt)
 {
-    tree[rt].val = tree[L(rt)].val + tree[R(rt)].val;
+    tree[rt].Sum = tree[L(rt)].Sum + tree[R(rt)].Sum;
 }
 
 
@@ -73,8 +74,8 @@ void PushDown(int rt)
     {
         tree[L(rt)].lazy += tree[rt].lazy;
         tree[R(rt)].lazy += tree[rt].lazy;
-        tree[L(rt)].val += (tree[L(rt)].r-tree[L(rt)].l+1)*tree[rt].lazy;
-        tree[R(rt)].val += (tree[R(rt)].r-tree[R(rt)].l+1)*tree[rt].lazy;
+        tree[L(rt)].Sum += (tree[L(rt)].r-tree[L(rt)].l+1)*tree[rt].lazy;
+        tree[R(rt)].Sum += (tree[R(rt)].r-tree[R(rt)].l+1)*tree[rt].lazy;
 
         tree[rt].lazy = 0;
     }
@@ -83,10 +84,10 @@ void PushDown(int rt)
 void build(int l, int r, int rt)
 {
     tree[rt].l=l; tree[rt].r=r;
-    tree[rt].lazy = 0;
+    tree[rt].lazy=0;
     if (l==r) //找到叶子,赋值
     { 
-        tree[rt].val = arr[l];
+        tree[rt].Sum = arr[l];
         return;
     }
 
@@ -108,7 +109,7 @@ void update(int l, int r, int val, int rt)//更新范围[l,r],当前所在的根rt
     {
         //这个节点在更新的区间里面,直接算完lazy和value然后退出
         tree[rt].lazy += val;
-        tree[rt].val += (tree[rt].r-tree[rt].l+1)*val;
+        tree[rt].Sum += (tree[rt].r-tree[rt].l+1)*val;
         return;
     }
 
@@ -130,12 +131,12 @@ void update(int l, int r, int val, int rt)//更新范围[l,r],当前所在的根rt
     PushUp(rt);
 }
 
-//查询区间(和)
+//区间查询(和)
 void query(int l, int r, int rt)//查找的范围[l,r],当前所在根rt
 {
     if (l<=tree[rt].l && tree[rt].r<=r)
     {
-        sum += tree[rt].val;
+        sum += tree[rt].Sum;
         return;
     }
 
@@ -156,7 +157,7 @@ void query(int l, int r, int rt)//查找的范围[l,r],当前所在根rt
 
 int main()
 {
-    freopen("in","r",stdin);
+    //freopen("in","r",stdin);
     int n, q;
     while (scanf("%d%d",&n,&q) != EOF)
     {
