@@ -4,10 +4,18 @@ http://blog.csdn.net/qiweigo/article/details/43566227
 本文结合小紫书总结STL在ACM竞赛中的使用
 
 
-std::ios::sync_with_stdio(false);
+std::ios::sync_with_stdio(false);cin.tie(0);//不能用cout<<endl;
+扩栈:
+//C++
+#pragma comment(linker, "/STACK:102400000,102400000")
+//G++
+int size = 256 << 20; // 256MB  
+char *p = (char*)malloc(size) + size;  
+__asm__("movl %0, %%esp\n" :: "r"(p));
 
 
-1.stringstream字符流,string类型:
+
+1.string类型:
 //string优点:可以直接用四则运算符和关系运算符
 string str1="22",str2="11";  
 str1+=str2;                 //类似于strcat
@@ -22,7 +30,10 @@ string ss; char str1[],str2[];
 const char* pp=ss.c_str(); //string转到char
 strcpy(str2,str1);         //char[]转到char[]
 /***string与char str[]转化***/
-
+//读取
+string s;
+scanf("%s",s.c_str);
+printf("%s",s.c_str);
 
 
 
@@ -76,7 +87,7 @@ vec.erase(it);                                            //*it=val,删除某个
 
 4.集合set(没有重复元素)://主要用于查询元素
 创建:
-set<int> s;				      //创建整型集合:s
+set<int> s;				      //创建整型集合s,默认升序
 set<int,less<int> > st1;      //降序排列
 set<int,greater<int> > st2;   //升序排列
 
@@ -226,11 +237,11 @@ put_deque(deq2,"deq2");
 
 10.bitset
 #include <bitset>  
-bitset<n> b;            //b有n位，每位都为0  
+bitset<n> b;                //b有n位，每位都为0  
 bitset<n> b(u);             //b是unsigned long型u的一个副本  
 bitset<n> b(s);             //b是string对象s中含有的位串的副本  
 bitset<n> b(s, pos, n);     //b是s中从位置pos开始的n个位的副本  
-bitset<32> bitvec; //32位，全为0。  
+bitset<32> bitvec;          //32位，全为0。  
 
 
 11.permutation  hdu1027
@@ -245,17 +256,23 @@ while(m--)
 
 
 12.unique:从序列中删除所有相邻的重复元素
-数组去重:
+//数组去重:
 int arr[N];
 sort(arr,arr+n);
 int len = unique(arr,arr+n)-arr;
+for (int i=0;i<len;i++)  cout<<arr[i];
+//向量去重:
+vector<int> v{1,2,2,3,2,1,1};
+vector<int>::iterator it = unique(v.begin(),v.end());//去重
+v.erase(it,v.end());
+for (int *t=v.begin();t!=v.end();t++)  cout << *t;
 
 
 //下面归入位运算
 13. lowbit hdu1196(find the lowest bit)
-lowbit: 返回2^t  (t为从右往左第一次出现1的位置)
+lowbit: 返回2^t  (t为从右边开始第一次出现1的位置/0的个数)
 int lowbit(int x) {
-	return x&(-x);
+    return x&(-x);
 }
 
 
@@ -275,19 +292,64 @@ point operator + (const point& A,const point& B){
 15. pair
 vector<pair<int,int> > vec;
 vec[2]=make_pair(2,3);
-
+/*
+ * 给出a[]和b[],现在固定b[],对a[]重排列,使得b[]中的最小到最大分别对应a[]中的最大到最小,
+ * 输出排列后的a[]
+ *
+ * 思路:a存数组,b存pair<num,index>
+ * a从大到小排,b按first从小到大排
+ * 然后直接ans[b[i].second] = a[i]
+ *
+ * 适用于排序后还要记住原来的下标的
+ */
+const int maxn = 2e5+5;
+int a[maxn];
+int ans[maxn];
+bool cmp(int a,int b) {return a>b;}
+typedef pair<int,int> pii;
+pii b[maxn];
+int main()
+{
+    int n;cin >> n;
+    for (int i=0;i<n;i++) scanf("%d",&a[i]);
+    for (int i=0;i<n;i++)
+    {
+        scanf("%d",&b[i].first);
+        b[i].second=i;
+    }
+    sort(a,a+n,cmp);
+    sort(b,b+n);//按first从小到大排序,使用于排序后还要记住原来下表的
+    for (int i=0;i<n;i++)
+        ans[b[i].second] = a[i];
+    for (int i=0;i<n;i++)
+        printf("%d ",ans[i]);
+    return 0;
+}
 
 
 16. rand (紫书P121)
-srand(time(NULL));     //在程序开头只用一次,初始化随机数种子
-rand();
-rand()%n;              //获取n以内整数
-rand()*1.0/100;
+#include <time.h>
+srand(time(NULL));   //在程序开头只用一次,初始化随机数种子
+
+//int型
+srand(time(NULL));
+printf("%d\n",rand());
+//获取n以内整数
+int t=100;
+srand(time(NULL));
+printf("%d\n",rand()%t);
+//double型
+srand(time(NULL));
+printf("%.6lf\n",rand()*1.0/100);
+//字符串
+int len=100;
+srand(time(NULL));
+while(len--) printf("%c\n",'A'+rand()%26);
+
 
 
 
 17. 技巧
-
 传引用,不要用返回
 void fill(vector<int>& v,int cnt)
 
@@ -314,4 +376,116 @@ int bs(Type a[], const Type& x, int l, int r)
     }
     return -1;
 } 
+
+
+18. 输入挂
+测试: hdu6208 青岛网络赛第三题的AC自动机,3000ms
+- AC自动机:
+- 1.用`string+sync`            各种TLE
+- 2.改用`char ss[]`            刚好卡过去..2800ms
+- 3.加了个`fastIO`输入挂...    2400ms就过了
+
+namespace fastIO  
+{
+    #define BUF_SIZE 100000  
+    //fread -> read
+    bool IOerror = 0;  
+    inline char nc() {  
+        static char buf[BUF_SIZE], *p1 = buf + BUF_SIZE, *pend = buf + BUF_SIZE;  
+        if(p1 == pend) {  
+            p1 = buf;  
+            pend = buf + fread(buf, 1, BUF_SIZE, stdin);  
+            if(pend == p1) {  
+                IOerror = 1;return -1;  
+            }  
+        }  
+        return *p1++;  
+    }  
+    inline bool blank(char ch) {  
+        return ch == ' ' || ch == '\n' || ch == '\r' || ch == '\t';  
+    }  
+    inline int read(char x[]) {  
+        char ch;  
+        while(blank(ch = nc()));  
+        if(IOerror)  
+            return 0;  
+        int k = 0;  
+        for(x[k++] = ch; (ch = nc())&&(!blank(ch))&&(ch != EOF); x[k++] = ch);  
+        x[k]='\0';  
+        return k;  
+    }
+    inline void readint(int &x) {  
+        char ch;  
+        while(blank(ch = nc()));  
+        if(IOerror)return;  
+        for(x = ch - '0'; (ch = nc()) >= '0' && ch <= '9'; x = x * 10 + ch - '0');  
+    }  
+#undef BUF_SIZE  
+};  
+using namespace fastIO;  
+
+
+//how to use
+while(read(n),!fastIO::IOerror)
+{
+    readint(T);
+    for (int i=1;i<=n;i++)
+        readint(a[i]);
+    char str[maxn];
+    read(str);
+}
+
+
+/**********kuangbin***********/
+//适用于正负整数
+template <class T>
+inline bool scan_d(T &ret) {
+    char c; int sgn;
+    if(c=getchar(),c==EOF) return 0; //EOF
+    while(c!='-'&&(c<'0'||c>'9')) c=getchar();
+    sgn=(c=='-')?-1:1;
+    ret=(c=='-')?0:(c-'0');
+    while(c=getchar(),c>='0'&&c<='9') ret=ret*10+(c-'0');
+    ret*=sgn;
+    return 1;
+}
+inline void out(int x) {
+    if(x>9) out(x/10);
+    putchar(x%10+'0');
+}
+
+/**********another***********/
+std::ios::sync_with_stdio(false);
+cin.tie(0);
+
+/**********test***********/
+#include <ctime>
+int main()
+{
+    double start = clock();
+    // do sth;
+    printf("%.3lf\n",double(clock()-start)/CLOCKS_PRE_SEC);
+}
+
+
+int maxn = 1e7+5;
+//1.406s
+while(maxn--) cin>>i;
+
+//0.552
+while(maxn--) scanf("%d",&i);
+
+//0.521
+std::ios::sync_with_stdio(false);
+while(maxn--) cin>>i;
+
+//0.427
+std::ios::sync_with_stdio(false); cin.tie(0);
+while(maxn--) cin>>i;
+
+//0.229 (kuangbin)
+while(maxn--) scan_d()i;
+
+//0.165 (神奇FastIO挂)
+while(maxn--) readint(i)
 

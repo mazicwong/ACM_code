@@ -124,7 +124,7 @@ ll mod_pow(ll x, ll n,ll mod)//x^n%mod
 const int mod = 998244353;
 int pow(int a,int b){
     int res=1;
-    for (int i=1;i<=n;i<<=1,a=1LL*a*a%mo) if(b&i) res=1LL*res*a%mo;
+    for (int i=1;i<=n;i<<=1,a=1LL*a*a%mod) if(b&i) res=1LL*res*a%mod;
     return res;
 }
 ```
@@ -157,6 +157,7 @@ bool isprime[maxn];
 void getprime()
 {
     bool(isprime,true,sizeof(isprime));
+    isprime[0]=isprime[1]=false;
     for (int i=2;i<maxn;i++)
     {
         if (isprime[i])
@@ -166,6 +167,13 @@ void getprime()
                 isprime[j]=false;
         }
     }
+}
+bool isPrime(int n)
+{
+    int sq = sqrt(n);
+    for (int i=2;i<=sq;i++)
+        if(n%i==0) return false;
+    return true;
 }
 ```
 
@@ -230,6 +238,8 @@ ll cont(ll n)
 >n的因子数,分解质因数n=P1^x1 * P2^x2* …… * Pm^xm;
 d(n)=(x1+1)*(x2+1)*...*(xm+1)
 d(n^k)=(kx1+1)*(kx2+1)...(kxm+1)  n=p1^x1*p2^x2...pm^xm
+
+
 
 
 ***
