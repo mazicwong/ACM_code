@@ -76,9 +76,9 @@ v.reserve(100);         //reserve只是预留空间并没有真正创建，v.pus
 v.resize(101);          //resize已经创建空间如果再v.push_back();空间就会到101
 v.size();               //已经创建的空间大小 OR 元素个数
 v.capacity();           //容器容量，是预留空间并没有实际创建  
-swap(a,b);					//交换两个元素的位置如:swap(v[0],v[1]);  
+swap(a,b);              //交换两个元素的位置如:swap(v[0],v[1]);  
 v.insert(place,element);  
-v.insert(place,n,element);	//在place（迭代器）位插入n个元素  
+v.insert(place,n,element);   //在place（迭代器）位插入n个元素  
 v[0];     //访问
 v.at[0];  //访问,越界时更安全
 vec.erase(remove(vec.begin(),vec.end(),val), vec.end());  //删除某个特定值val,remove是将其移到最后
@@ -87,19 +87,20 @@ vec.erase(it);                                            //*it=val,删除某个
 
 4.集合set(没有重复元素)://主要用于查询元素
 创建:
-set<int> s;				      //创建整型集合s,默认升序
+set<int> s;             //创建整型集合s,默认升序
 set<int,less<int> > st1;      //降序排列
 set<int,greater<int> > st2;   //升序排列
 
 基本操作:
-s.insert(a);		    //插入元素a,并会自动排序,默认升序
-s.size();				//返回元素个数
+s.insert(a);            //插入元素a,并会自动排序,默认升序
+s.size();               //返回元素个数
 s.empty();
 s.find(a);              //返回元素的下标，没找到的话返回s.end()
-s.erase(s.find(a))      //删除元素a
+s.erase(s.find(a));     //删除元素a
 s.count(a);             //元素个数
 s.lower_bound();        //lower_bound,upper_bound都可以用
-copy(s.begin(), s.end(), ostream_iterator<string>(cout, "\n"));//#include<iterator>中的函数：输出全部集合中的元素，并在每个元素后面接换行符
+copy(s.begin(), s.end(), ostream_iterator<string>(cout, "\n"));
+//#include<iterator>中的函数：输出全部集合中的元素，并在每个元素后面接换行符
 
 逻辑操作:
 //获得两个set的并集,s1,s2的并存入s3
@@ -194,8 +195,8 @@ que.empty();	//队列是否为空
 
 
 8.priority_queue://解决多路归并问题(紫书P119,蓝书P188)
-(!其实priority_queue跟multiset大部分功能很像,区别在于set支持随机操作;都可以时,用priority_queue好些,cf865D)
-priority_queue<int,vector<int>,less<int> > pque;    //默认容器为vector,其中less算子，表示大的先出队(默认less)
+(!其实priority_queue跟multiset大部分功能很像,都是自动排序,区别在于set支持随机操作;都可以时,用priority_queue好些,cf865D)
+priority_queue<int,vector<int>,less<int> > pque;    //less,表示大的先出队(默认less)
 priority_queue<int,vector<int>,greater<int> > pque;	//小的先出队  
 pque.top(); pque.pop();   //不用front
 
