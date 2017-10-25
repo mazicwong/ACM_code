@@ -4,8 +4,6 @@
 #include <algorithm>
 #include <cstdio>
 using namespace std;
-typedef long long ll;
-const int maxn = 1e5 + 5;
 
 /*
 参考题型: 
@@ -19,7 +17,6 @@ hdu 1698
 	区间更新: 替换为别的数
 	区间查询: 求和
 */
-
 
 
 /*
@@ -46,6 +43,7 @@ hdu 1698
  */
 
 typedef long long ll;
+const int maxn = 1e5 + 5;
 
 inline int L(int l) {return l<<1;}
 inline int R(int r) {return (r<<1)+1;}
@@ -65,7 +63,6 @@ void PushUp(int rt)
 {
     tree[rt].Sum = tree[L(rt)].Sum + tree[R(rt)].Sum;
 }
-
 
 //"查询"和"更新"时先PushDown一下处理子区间的lazy和value
 void PushDown(int rt)
@@ -97,6 +94,7 @@ void build(int l, int r, int rt)
     build(mid+1,r,R(rt));
 
     //回溯维护value(区间和)
+    //因为建立属性值顺序只能从下到上,但是建树是从上往下的,所以回溯
     PushUp(rt);
 }
 
@@ -115,7 +113,6 @@ void update(int l, int r, int val, int rt)//更新范围[l,r],当前所在的根rt
 
     PushDown(rt);
     if (tree[rt].l == tree[rt].r) return;
-
 
     //分治
     int mid = MID(tree[rt].l, tree[rt].r);

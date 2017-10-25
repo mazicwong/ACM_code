@@ -53,7 +53,6 @@ void build(int l, int r, int rt)
     PushUp(rt);
 }
 
-
 //更新区间(即更新区间对应节点以及他的所有祖先);祖先在回溯时候更新
 void update(int l, int r, int val, int rt)
 {
@@ -61,7 +60,7 @@ void update(int l, int r, int val, int rt)
     {
         tree[rt].Max = val;
         return;
-	}
+    }
 
     int mid = MID(tree[rt].l, tree[rt].r);
     if (mid<l) update(l,r,val,R(rt));        //在右子树
