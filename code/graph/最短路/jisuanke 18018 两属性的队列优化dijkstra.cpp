@@ -7,18 +7,6 @@
 #include <vector>
 #include <string>
 #include <queue>
-#include <map>
-#include <set>
-#include <stack>
-#include <utility>
-#include <complex>
-#include <functional>
-#include <bitset>
-#include <time.h>
-#include <assert.h>
-#include <sstream>
-#include <regex>
-#include <random>
 #define ff first
 #define ss second
 using namespace std;
@@ -34,14 +22,14 @@ const int INF=0x3f3f3f3f;
 const int N=105;
 
 struct Node{
-	int v,w,z;	//w是淋雨,z是路程
+    int v,w,z;	//w是淋雨,z是路程
 };
 vector<Node> G[N];  //邻接表存点,带上边的属性,用Node
 //优先第一个属性,然后再第二个属性
 struct HeapNode{
     int u,d,z;
     bool operator<(const HeapNode &rhs)const{
-    	if(d==rhs.d)return z>rhs.z;
+        if(d==rhs.d)return z>rhs.z;
         return d>rhs.d;
     }
 };
@@ -50,12 +38,12 @@ bool f[N];
 pii d[N];
 int main() 
 {
-	int T;cin>>T;
-	while(T--)
+    int T;cin>>T;
+    while(T--)
 	{
-		int n,m1,m2,r;
-		scanf("%d%d%d%d",&n,&m1,&m2,&r);
-		for(int i=1;i<=n;i++)G[i].clear();
+        int n,m1,m2,r;
+        scanf("%d%d%d%d",&n,&m1,&m2,&r);
+        for(int i=1;i<=n;i++)G[i].clear();
         while(m1--)
         {
             int u,v; scanf("%d%d",&u,&v);
@@ -64,16 +52,16 @@ int main()
         }
         while(m2--)
         {
-			int u,v,w;
-			scanf("%d%d%d",&u,&v,&w);
-			G[u].push_back({v,w,w});
-			G[v].push_back({u,w,w});
-		}
-		priority_queue<HeapNode> Q;  //雨小优先,雨相等时路程小优先
+            int u,v,w;
+            scanf("%d%d%d",&u,&v,&w);
+            G[u].push_back({v,w,w});
+            G[v].push_back({u,w,w});
+        }
+        priority_queue<HeapNode> Q;  //雨小优先,雨相等时路程小优先
         for(int i=1;i<=n;i++){
-			d[i].ff=INF;   //ff是第一个属性雨
-			d[i].ss=0;     //ss是第二个属性路程
-		}
+            d[i].ff=INF;   //ff是第一个属性雨
+            d[i].ss=0;     //ss是第二个属性路程
+        }
         d[1].ff=0;
         memset(f,0,sizeof f);
         Q.push({1,d[1].ff,d[1].ss});
@@ -94,14 +82,11 @@ int main()
                 	d[v].ff=x.d+w;
                 	d[v].ss=x.z+z;
                 	Q.push({v,d[v].ff,d[v].ss});
-				}
+                }
             }
         } 
-		if(d[n].ff==INF){
-			puts("-1");
-		}else{
-			printf("%d\n",d[n].ff);
-		}
+        if(d[n].ff==INF) puts("-1");
+        else printf("%d\n",d[n].ff);
 	}
 	return 0;
 }
