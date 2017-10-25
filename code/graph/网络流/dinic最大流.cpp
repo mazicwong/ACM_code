@@ -16,7 +16,6 @@ using namespace std;
  * 一个流是最大流，当且仅当它的残留网络不包含增广路径
  */
 
-
 /* hdu1532 最大流裸题
  * 最大流 ford-fulkerson方法,dinic算法
  *

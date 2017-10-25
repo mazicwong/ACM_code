@@ -13,7 +13,7 @@
 using namespace std;
 
 
-/*
+/* hdu3068
  * manacher“马拉车”算法: 计算字符串的最长回文字串 O(n)
  *
  * 算法:每两个相邻字符中插入一个分隔符'#'
@@ -80,7 +80,7 @@ void Manacher(char s[],int len)
 char str[MAXN];
 int main()
 {
-    freopen("in","r",stdin);
+    //freopen("in","r",stdin);
     while(scanf("%s",str)!=EOF)
     {
         int len=strlen(str);

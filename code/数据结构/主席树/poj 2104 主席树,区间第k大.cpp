@@ -50,12 +50,6 @@ using namespace std;
 1 7 3    //[1,7]第3大:3
 */
 
-
-#include<iostream>
-#include<cstdio>
-#include<cstring>
-#include<algorithm>
-using namespace std;
 const int N=100005,M=5005;
 int gi()
 {

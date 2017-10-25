@@ -14,8 +14,9 @@
 #include <algorithm>
 using namespace std;
 const int maxn = 1e4+4;
+//森林上每棵树lca
 /****************union_find*********************/
-int fa[maxn<<1];//并查集所用,记录前驱节点
+int fa[maxn];//并查集所用,记录前驱节点
 void init_fa(int n)
 {
     for (int i=1;i<=n;i++)
@@ -124,10 +125,9 @@ int depth(int u)
     return dep[fir[u]];
 }
 
-
 int main()
 {
-    freopen("in","r",stdin);
+    //freopen("in","r",stdin);
     int n,m,q;
     while(scanf("%d%d%d",&n,&m,&q)!=EOF)
     {

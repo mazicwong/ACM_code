@@ -13,8 +13,9 @@
 #include <algorithm>
 using namespace std;
 /*
- * 给一颗无根树,q个询问,每次问两个节点间的距离
- * 因为是树,所以是单向的,不用最短路算法(图)
+ * hdu2586
+ * 给一颗无根树,带边权,n个点,q个询问,每次问两个节点间的距离
+ * 树上两点只有唯一路径,所以不用最短路算法(图),直接lca(rmq)就好了
  */
 const int maxn = 40000+5;
 
@@ -41,7 +42,6 @@ int vis[maxn<<1];//dfs中是否访问过节点
 int p[maxn<<1];//每个点的父节点
 int st[maxn<<1][20];//rmq用来存的,st[i][j]从i开始的2^j个数
 int cnt=0;
-int height[maxn];
 
 void dfs(int u,int d)//传入点跟深度
 {
@@ -100,12 +100,10 @@ int depth(int u)
     return dep[fir[u]];
 }
 
-
 int main()
 {
-    freopen("in","r",stdin);
-    int t;
-    cin >> t;
+    //freopen("in","r",stdin);
+    int t; cin >> t;
     while(t--)
     {
         init();

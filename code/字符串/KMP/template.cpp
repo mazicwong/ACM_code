@@ -22,9 +22,10 @@ kmp思想: 对模式串P预处理计算出next[]数组;查找时,i只扫一遍,当T[i]与P[j]失配时,P向
 注意:下面两套模板是可以混搭的,一套是自己总结的(容易理解),一套是kuangbin大神的(比赛敲起来块)
 最好用1的.
 
-
-int next[maxm];
-void getNext(char *P)
+char T[1000];//母串
+char P[100];//模板串
+int next[101];//[1..m]
+void getNext()
 {//next从1开始,字符串从0开始
     int pp = strlen(P);
     next[0]=-1;
@@ -45,7 +46,8 @@ void getNext(char *P)
     }
 }
 
-int kmp(char *T,char *P)//返回P在T中首次出现的位置,从0开始
+//返回P在T中首次出现的位置,从0开始
+int kmp()
 {
     int tt=strlen(T),pp=strlen(P);
     int i=0,j=0;
@@ -59,8 +61,9 @@ int kmp(char *T,char *P)//返回P在T中首次出现的位置,从0开始
     if (j==pp) return i-j;
     else return -1;
 }
+//返回模式串P在主串T中出现的次数(可重叠)(法1:较慢)
 int kmp_count()
-{//返回模式串在主串T中出现的次数(可重叠)(法1:较慢)
+{
     int tt=strlen(T),pp=strlen(P);
     int i=0,j=0;
     int ans=0;
@@ -79,13 +82,11 @@ int kmp_count()
 
 /******************************KMP**************************/
 
-
-
 /*************************kuangbin KMP模板****************************/
 char T[1000];//母串
 char P[100];//模板串  
 int next[101];//失配串(位数比模板串多1)
-void getNext(char *P)
+void getNext()
 {//next从1开始,字符串从0开始
     int pp = strlen(P);
     next[0]=-1;
@@ -97,7 +98,7 @@ void getNext(char *P)
         next[j]=k;
     }
 }
-void kmp(char *T, char *P) //输出所有匹配的位置
+void kmp() //输出所有匹配的位置
 {
 	int tt=strlen(T),pp=strlen(P);
 	int j=-1;

@@ -284,7 +284,7 @@ int r[MAXN];//转换为int串[0..n-1]
 
 int main()//hdu4552 求所有前缀出现的次数之和
 {
-    freopen("in","r",stdin);
+    //freopen("in","r",stdin);
     while(scanf("%s",str)!=EOF)
     {
         int n=strlen(str);
