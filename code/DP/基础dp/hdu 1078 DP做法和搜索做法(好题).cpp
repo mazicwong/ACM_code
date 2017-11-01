@@ -60,7 +60,6 @@ int main()
         int ans = dp[0][0];
         for (int tt=0;tt<tot;tt++) //找到范围内比他小的点
         {
-            //自底向上更新点(i,j)
             int i=node[tt].i, j=node[tt].j;
             for (int rr=max(0,i-k);rr<=min(n-1,i+k);rr++)
             {
