@@ -205,7 +205,7 @@ struct cmp{
         return a%10 > b%10;
     }
 };
-priority_queue<int,vector<int>, cmp> pq;
+priority_queue<int,vector<int>, cmp> pq;//则是先取出小的那个(与一般sort_cmp不一样)
 
 struct item{
     int num,period,time;
