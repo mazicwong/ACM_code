@@ -353,6 +353,10 @@ inline T inv(T w , T M){
 }  
 } ;//using namespace NT;  
   
+// do not want to say anything...
+// today I finish the final exam...
+// have time to code
+// ML 1/17/2018
 // <<= ' A. Random Event ..  
   
 namespace RNG{  
