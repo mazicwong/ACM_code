@@ -1,4 +1,4 @@
-//3.cpp
+//2.cpp
 #include <cstdio>
 #include <cstring>
 #include <iostream>
@@ -12,13 +12,12 @@
 #include <cstdlib>
 #include <time.h>
 using namespace std;
-
+const double pi = acos(-1);
 int main()
 {
     //freopen("in","r",stdin);
-    for (int i=1;i<10;i++) {
-        int a=1;
-    }
-
+    int r;
+    cin >> r;
+    printf("%.7lf",pi*r*r);
     return 0;
 }
