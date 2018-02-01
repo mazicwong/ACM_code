@@ -38,32 +38,22 @@ int main()
     int ans = 0;
     for (int i=0;i<n;i++)
     {
+        int cnt = 0;
         for (int j=0;j<m;j++)
         {
-            if (j+k-1>=m) break;
-            int kk=j;
-            for (kk=j;kk<=j+k-1;kk++)
-            {
-                if (mp[i][kk]=='.')
-                    continue;
-                else break;
-            }
-            if (kk==j+k) ans++;
+            if (mp[i][j]=='.') cnt++;
+            else cnt=0;
+            if (cnt>=k) ans++;
         }
     }
     for (int j=0;j<m;j++)
     {
+        int cnt = 0;
         for (int i=0;i<n;i++)
         {
-            if (i+k-1>=n) break;
-            int kk=i;
-            for (kk=i;kk<=i+k-1;kk++)
-            {
-                if (mp[kk][j]=='.')
-                    continue;
-                else break;
-            }
-            if (kk==i+k) ans++;
+            if (mp[i][j]=='.') cnt++;
+            else cnt=0;
+            if (cnt>=k) ans++;
         }
     }
     printf("%d",ans);
