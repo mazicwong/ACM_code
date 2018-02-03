@@ -8,7 +8,6 @@
 #include <set>
 #include <map>
 #include <string>
-#include <cmath>
 #include <cstdlib>
 using namespace std;
 const int maxn = 2010;
