@@ -12,6 +12,7 @@ WA5
 2 1 2
 => 3 1 2  (X)
 */
+
 const int maxn = 1000 + 5;
 int a[maxn];
 int b[maxn];
