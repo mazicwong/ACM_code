@@ -1,0 +1,2 @@
+- For java file, the name must be 'Main' when being submitted to OJ;
+- In local env, java file could not named in just number like 1001.java;
