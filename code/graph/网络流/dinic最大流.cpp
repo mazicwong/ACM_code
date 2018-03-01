@@ -77,7 +77,7 @@ int dfs(int s,int t,int f)
 
 //求解从s到t的最大流
 int max_flow(int s,int t)  
-{  
+{
     int flow=0;  
     while(1)
     {
@@ -88,6 +88,7 @@ int max_flow(int s,int t)
         flow+=f;
     }
 }
+
 
 int main()
 {

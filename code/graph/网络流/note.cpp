@@ -1,12 +1,14 @@
+参考网站: "http://acm.pku.edu.cn/summerschool/gw_netflow.pdf"
 
 dinct
 最大流问题,源点S到汇点T,管道有固定容量(流经速度),
 网络流即问这个S到T的最大速率是多少
 从点1->n,要流过的流量最大,
+(思想:dfs一遍,找到一条s->t,路径上所有边减去最小边,然后新增一个相反路,继续找,如果用到之前的相反路,就是互相抵消,可以排除不是最优的情况,例子见开头引用网站;不断dfs直到无路径)
 
 FF基于三种思想:
-    残留网络(Residual Network)
-    增广路(Augmenting Path)
+    残留网络(Residual Network): 原图的残余网络,即添加反向边后的新图
+    增广路径(Augmenting Path): 每次dfs找新流量构成新的残余网络的过程,叫做找增广路径
     割(Cut)
 
 ISAP算法: 改良的最短增广路算法
@@ -15,18 +17,21 @@ SAP:每次找增广路用bfs,保证找到的增广路弧数最少,即EK算法
 
 
 1.
-Ford-Fulkerson: 
+Ford-Fulkerson:(效率低)
 
 2.
-EK算法: 即bfs找增广路 O(V*E^2)  基于Ford-Fulkerson,(效率低)
+EK算法: 即bfs找增广路 O(n*m^2),是FF的改进
 EK算法,每次bfs寻找从s到t的最短路作为增广路径,然后增广流量f并修改残量网络,直到不存在新的增广路径。
-EK算法的时间复杂度为 O(VE^2)，适用于稀疏边
+EK算法的时间复杂度为 O(nm^2)，适用于稀疏边
 添加反向边作用: 使程序有个后悔的机会
+
+相对于FF的改进:每次增广取s->t最少边的路,即bfs
 
 
 3.(代码少)使用二分图:O(sqrt(V)*E)
 dinic: O(V^2E)->O(VElog(V)) dfs实现, 属于SAP(Shortest Augmenting Path)算法,;
-区别于EK: 每次都在找最短可行路进行增广(dfs代替多次bfs)
+
+相对于EK的改进: 用dfs代替bfs,一次增广找多条增广路,   每次都在找最短可行路进行增广(dfs代替多次bfs)
 
 4.(非递归,好些,)
 isap: O(V^2E)
