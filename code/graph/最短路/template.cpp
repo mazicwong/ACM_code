@@ -61,77 +61,77 @@ void Dijkstra(int cost[][maxn],int dist[],int n,int beg)
 2.dijkstra+堆优化(邻接表)--挑战书(P102)
 //(1).最短路(dijkstra+堆优化)  O(E logE)
 /*
- * 使用优先队列优化Dijkstra算法,复杂度O(ElogE)
- * 注意对vector<Edge>E[maxn] 进行初始化后加边
+ * 使用优先队列优化Dijkstra算法
+ * 复杂度O(ElogE)
+ * 注意对vector<node> G[maxn] 进行初始化后加边
  *
  * 点从1开始编号
- * dijkstra(n,1)是共n个点,1作为源点
+ * dijkstra(1)是共n个点,1作为源点
  */
+typedef pair<int,int> pii;//距离,点
+const int maxn = 1e5+5;
 const int INF = 0x3f3f3f3f;
-const int maxn = 2e3+5;
-
-typedef pair<int, int> PII;//first是最短距离,second是顶点的编号
-struct edge{
-    int to,cost;
-    edge(int _to=0,int _cost=0):
-        to(_to),cost(_cost){}
+int n,m;
+//有权图用edge{to,cost}, 无权图/树用node{int}
+struct node{
+    int to;
+    int cost;
+    node(int _to=0,int _cost=0):to(_to),cost(_cost){}
 };
-vector<edge> E[maxn];//邻接表
-int dist[maxn];//源点到其他点距离
+vector<node> G[maxn];
+int dist[maxn];
 
-void dijkstra(int n,int beg)//点的编号从1开始
+void dijkstra(int begin)
 {
-    priority_queue<PII, vector<PII>, greater<PII> > Q;
-    for (int i=0;i<=n;i++) dist[i]=INF;
-    dist[beg]=0;
-    Q.push(PII(0,beg));
-    
-    while(!Q.empty())  //每次找最短路改成堆实现
+    priority_queue<pii,vector<pii>,greater<pii> > Q; //使得按距离dist[]排
+    for(int i=0;i<=n;i++) dist[i]=INF; dist[begin]=0;
+    Q.push(pii{dist[begin],begin});
+
+    while(!Q.empty())
     {
-        PII a = Q.top(); Q.pop();
-        int u = a.second;//点
-        int d = a.first;//距离
-        if (dist[u]<d)
-            continue;//访问过且之前的更优,回溯
-        for(int i=0;i<E[u].size();i++)
+        pii now=Q.top();Q.pop();
+        int u = now.second;
+        int cost = now.first;
+        if(dist[u] < cost) continue; //已被更新过
+        for(int i=0;i<G[u].size();i++)
         {
-            edge &e = E[u][i];
-            if (dist[e.to] > dist[u]+e.cost)
+            node nxt = G[u][i];
+            int v = nxt.to;
+            int nxt_cost = nxt.cost;
+            if(dist[v] > dist[u]+nxt_cost)
             {
-                dist[e.to] = dist[u]+e.cost;
-                Q.push(PII(dist[e.to], e.to));
+                dist[v] = dist[u]+nxt_cost;
+                Q.push({dist[v],v});
             }
         }
     }
 }
-void addedge(int u,int v,int w)
-{
-    E[u].push_back(edge(v,w));
-    //E[u].push_back({v,w});
-}
 void init(int n)
 {
-    for (int i=0;i<=n;i++)
-        E[i].clear();
+    for(int i=0;i<=n;i++)
+    {
+        G[i].clear();
+    }
 }
 int main()
-{   //poj2378 从n点走到1点,给出权重,求最短路
-    //freopen("in","r",stdin);
-    int m,n;
-    cin >> m >> n;
-    init(n);
-    int u,v,cost;
-    for (int i=0;i<m;i++)
+{
+    //hdu 2544 裸dijkstra
+    while(cin>>n>>m && n && m)
     {
-        scanf("%d%d%d",&u,&v,&cost);
-        addedge(u,v,cost);
-        addedge(v,u,cost);
+        init(n);
+        for(int i=0;i<m;i++)
+        {
+            int u,v,cost;
+            scanf("%d%d%d",&u,&v,&cost);
+            G[u].push_back({v,cost});
+            G[v].push_back({u,cost});
+        }
+        dijkstra(1);
+        cout << dist[n] << endl;       
     }
-    //如果源点为1,则用dijkstra(n,1)
-    dijkstra(n,n);//MAX_V,begin (n点走到1点)
-    cout << dist[1];
     return 0;
 }
+
 
 
 //(2).带两个属性的最短路(dijkstra)
