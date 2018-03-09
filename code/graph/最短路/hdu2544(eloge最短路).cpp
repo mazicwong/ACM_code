@@ -1,23 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
-/*
- * 使用优先队列优化Dijkstra算法
- * 复杂度O(ElogE)
- * 注意对vector<node> G[maxn] 进行初始化后加边
- *
- * 点从1开始编号
- * dijkstra(1)是共n个点,1作为源点
- */
-typedef pair<int,int> pii;//距离,点
+//hdu 2544 裸dijkstra
+typedef pair<int,int> pii;
 const int maxn = 1e5+5;
 const int INF = 0x3f3f3f3f;
 int n,m;
-//有权图用edge{to,cost}, 无权图/树用node{int}
+
 struct node{
     int to;
     int cost;
     node(int _to=0,int _cost=0):to(_to),cost(_cost){}
 };
+
 vector<node> G[maxn];
 int dist[maxn];
 
@@ -56,7 +50,6 @@ void init(int n)
 }
 int main()
 {
-    //hdu 2544 裸dijkstra
     while(cin>>n>>m && n && m)
     {
         init(n);
@@ -68,7 +61,6 @@ int main()
             G[v].push_back({u,cost});
         }
         dijkstra(1);
-        //for(int i=1;i<n;i++)cout<<dist[i]<<endl;
         cout << dist[n] << endl;       
     }
     return 0;
