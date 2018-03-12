@@ -7,6 +7,22 @@
 在O(n)时间内,找到以每个字符为中心的最长回文串
 
 
+
+//////////////
+//字符串读取//
+#1 读整行
+In c++:
+    string str;  getline(cin,str);
+    char str1[100]; cin.getline(str1,100);
+    char str2[100]; fgets(str2,100,stdin);
+In java:
+    Scanner cin=new Scanner(System.in);
+    String str = null;
+    while(cin.hasNextLine()){
+        line = cin.nextLine();
+    }
+
+
 ////////////////////////////////////////////////////////////////////////////////
 2. KMP   //O(m)预处理,O(n)匹配
 // O(n+m)
@@ -35,10 +51,10 @@ void getNext()
 {//next从1开始,字符串从0开始
     int pp = strlen(P);
     next[0]=-1;
-    int k=-1,j=0;
+    int k=-1,j=0; //k控制字符串左边，j控制字符串右边(即推进)
     while(j<pp)
     {
-        if (k==-1 || P[k]==P[j]) //P[k]前缀,P[j]后缀
+        if (k==-1 || P[k]==P[j]) //每次匹配成功，则向右推进，并更新nxt[]
         {
             j++;k++;
             /*
@@ -46,9 +62,9 @@ void getNext()
              * if (P[j]!=P[k]) nextval[j]=k;
              * else next[j]=nextval[k];
              */
-            next[j]=k;
+            next[j]=k;//
         }
-        else k=next[k];//不等,左边就自己返回,(运用了kmp思想了)
+        else k=next[k];//每次不等,k一直跳回直到相等
     }
 }
 
