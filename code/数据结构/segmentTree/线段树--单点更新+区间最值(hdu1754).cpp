@@ -1,11 +1,5 @@
-#include <cstring>
-#include <string>
-#include <iostream>
-#include <algorithm>
-#include <cstdio>
+#include <bits/stdc++.h>
 using namespace std;
-const int maxn = 2e5 + 5;
-
 /*
  * problem :hdu 1754
  * 单点更新(加),区间查询(找最值)
@@ -15,112 +9,91 @@ const int maxn = 2e5 + 5;
  * update() 更新值
  * query()  查询最值
  */
-
-inline int L(int l) { return l<<1;}
-inline int R(int r) { return (r<<1)+1;}
-inline int MID(int l, int r) { return (l+r)>>1;}
+//1.不要忘了建树
+//2.左移优先级小于加号,右儿子写成了tr[rt].r<<1+1调试半天
+const int maxn = 1e5+5;
 struct node{
     int l,r;
-    int Max;//存区间最大值
-}tree[maxn<<2];     //tree[1..2^n-1]
-int arr[maxn];      //存放初始节点arr[1..n]
-int ans = 0;        //查询到的最大值
+    int val;
+}tr[maxn*4];
+int a[maxn];
 
-void PushUp(int rt)
+void pushup(int rt)
 {
-    //回溯时,对所有祖先节点PushUp赋属性值
-    tree[rt].Max = max(tree[L(rt)].Max, tree[R(rt)].Max);
+    tr[rt].val = max(tr[rt<<1].val, tr[rt<<1|1].val);
 }
 
-//初始化树节点,递归至叶子,回溯更新每个节点的值(l,r,val)
-//有些属性自上而下就定完了,有些要先确定儿子的,所以要回溯才确定
-void build(int l, int r, int rt)
+void build(int rt,int l,int r)
 {
-    //l,r只改一次,后面不动了,只动属性值
-	tree[rt].l=l;  tree[rt].r=r;
-	if (l==r) //到叶子了,直接赋属性值
+    tr[rt].l=l; tr[rt].r=r;
+    if(l==r)
     {
-        tree[rt].Max = arr[l];
-        return;
+        tr[rt].val=a[l];
     }
-
-    //分治,二分区间
-    int mid = MID(l,r);
-    build(l, mid, L(rt));
-    build(mid+1, r, R(rt));
-
-    //回溯赋属性值
-    PushUp(rt);
+    else
+    {
+        int mid = (l+r)>>1;
+        build(rt<<1,l,mid);
+        build(rt<<1|1,mid+1,r);
+        pushup(rt);
+    }
 }
 
-//更新区间(即更新区间对应节点以及他的所有祖先);祖先在回溯时候更新
-void update(int l, int r, int val, int rt)
+void update(int rt,int ql,int qr,int val)
 {
-    if (l==tree[rt].l && tree[rt].r==r)//找到
+    if(ql==tr[rt].l && tr[rt].r==qr) //单点更新
     {
-        tree[rt].Max = val;
-        return;
+        tr[rt].val = val;
+        return ;
     }
-
-    int mid = MID(tree[rt].l, tree[rt].r);
-    if (mid<l) update(l,r,val,R(rt));        //在右子树
-    else if (mid>=r) update(l,r,val,L(rt));  //在左子树
-    else                                     //同时在左右子树
+    
+    int mid = (tr[rt].l+tr[rt].r)/2;
+    if(qr<=mid) update(rt<<1,ql,qr,val);
+    else if(mid<ql) update(rt<<1|1,ql,qr,val);
+    else
     {
-        update(l,mid,val,L(rt));
-        update(mid+1,r,val,R(rt));
+        update(rt<<1,ql,mid,val);
+        update(rt<<1|1,mid+1,qr,val);
     }
-
-    PushUp(rt);
+    pushup(rt);
 }
-
-//区间查询(最值--节点的属性值Max最大)
-void query(int l, int r, int rt)//查找的范围[l,r],当前所在的根rt
+int ans = 0x3f3f3f3f;
+void query(int rt,int ql,int qr)
 {
-    if (l==tree[rt].l && tree[rt].r==r)//找到区间(<=)
+    if(ql<=tr[rt].l && tr[rt].r<=qr)
     {
-        ans = max(ans,tree[rt].Max);
+        ans = max(ans, tr[rt].val);
         return;
     }
-    //if (tree[rt].l==tree[rt].r) return;
-
-    int mid = MID(tree[rt].l, tree[rt].r);
-    if (mid<l) query(l,r,R(rt));             //在右子树
-    else if (mid>=r) query(l,r,L(rt));       //在左子树
-    else                                     //同时在左右子树
+    int mid = (tr[rt].l+tr[rt].r)/2;
+    if(qr<=mid) query(rt<<1,ql,qr);
+    else if(mid<ql) query(rt<<1|1,ql,qr); //<=
+    else
     {
-        query(l,mid,L(rt));
-        query(mid+1,r,R(rt));
+        query(rt<<1,ql,mid);
+        query(rt<<1|1,mid+1,qr);
     }
 }
 
 int main()
 {
-    //freopen("in","r",stdin);
-    int n,q;
-    while (scanf("%d%d",&n,&q)!=EOF)
+    int n,q;cin>>n>>q;
+    for (int i=0;i<n;i++)
     {
-        for (int i=1;i<=n;i++)
-            scanf("%d",&arr[i]);
-        build(1,n,1);//left,right,root
-        while (q--)
+        scanf("%d",&a[i]);
+    }
+    build(1,1,n);
+    char str[5];
+    while(q--)
+    {
+        scanf("%s",str);
+        if(str[0]=='U')
         {
-            getchar();
-            char qq = getchar();
-            if ('U' == qq)
-            {
-                int idx,val;
-                scanf("%d%d",&idx,&val);//这样操作单点更新就跟区间更新一样了
-                update(idx,idx,val,1);//left,right,value,root
-            }
-            else
-            {
-                int l,r;
-                scanf("%d%d",&l,&r);
-                ans = 0;
-                query(l,r,1);//left,right,root
-                printf("%d\n",ans);
-            }
+
+        }
+        else if (str[0]=='Q')
+        {
+            
         }
     }
     return 0;
