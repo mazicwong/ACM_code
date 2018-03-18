@@ -1,0 +1,18 @@
+
+### 区间DP
+石子归并就是很经典的问题了,见CCF那个题  
+然后,这种题型一个特点是按照区间长度从小到大DP  
+即
+```cpp
+for(int len=1;len<n;len++)
+{
+    for(int i=1;i<=n-len;i++)
+    {
+        int j=i+len;
+        for(int k=i;k<=j;k++)
+        {
+            
+        }
+    }
+}
+```

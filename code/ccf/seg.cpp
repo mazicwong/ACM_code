@@ -1,5 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
+//1.不要忘了建树
+//2.左移优先级小于加号,右儿子写成了tr[rt].r<<1+1调试半天
+const int maxn = 1e5+5;
 struct node{
     int l,r;
     int val;
@@ -8,7 +11,7 @@ int a[maxn];
 
 void pushup(int rt)
 {
-    tr[rt].val = min(tr[rt<<1].val, tr[rt<<1|1].val);
+    tr[rt].val = max(tr[rt<<1].val, tr[rt<<1|1].val);
 }
 
 void build(int rt,int l,int r)
@@ -36,21 +39,21 @@ void update(int rt,int ql,int qr,int val)
     }
     
     int mid = (tr[rt].l+tr[rt].r)/2;
-    if(qr<=mid) update(rt<<1,ql,rt,val);
+    if(qr<=mid) update(rt<<1,ql,qr,val);
     else if(mid<ql) update(rt<<1|1,ql,qr,val);
     else
     {
-        update(rt<<1,ql,qr,val);
-        update(rt<<1|1,ql,qr,val);
+        update(rt<<1,ql,mid,val);
+        update(rt<<1|1,mid+1,qr,val);
     }
     pushup(rt);
 }
-int ans = INF;
+int ans = 0x3f3f3f3f;
 void query(int rt,int ql,int qr)
 {
     if(ql<=tr[rt].l && tr[rt].r<=qr)
     {
-        ans = min(ans, tr[rt].val);
+        ans = max(ans, tr[rt].val);
         return;
     }
     int mid = (tr[rt].l+tr[rt].r)/2;
@@ -58,8 +61,8 @@ void query(int rt,int ql,int qr)
     else if(mid<ql) query(rt<<1|1,ql,qr); //<=
     else
     {
-        query(rt<<1,ql,qr);
-        query(rt<<1|1,ql,qr);
+        query(rt<<1,ql,mid);
+        query(rt<<1|1,mid+1,qr);
     }
 }
 

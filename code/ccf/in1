@@ -1,8 +1,4 @@
-Hello
-0
-5
-HelloWorld
-HiHiHelloHiHi
-GrepIsAGreatTool
-HELLO
-HELLOisNOTHello
+3 201711170032 201711222352
+0 7 * * 1,3-5 get_up
+30 23 * * Sat,Sun go_to_bed
+15 12,18 * * * have_dinner
