@@ -181,7 +181,7 @@ int main(){
 //x^n%mod,重复n次x的乘积,把n拆为多个2的幂形式(即直接判二进制位)  
 //判n的每一位过程中,每次都更新x为x^2,对应上面的2的幂次  
 const int mod = 998244353;
-ll mod_pow(ll x, ll n,ll mod)//x^n%mod
+ll quick_pow(ll x, ll n,ll mod)//x^n%mod
 {
     ll res=1;
     while(n>0)
@@ -192,10 +192,28 @@ ll mod_pow(ll x, ll n,ll mod)//x^n%mod
     }
     return res;
 }
-//北大版本2
-int pow(int a,int b){
-    int res=1;
-    for (int i=1;i<=n;i<<=1,a=1LL*a*a%mod) if(b&i) res=1LL*res*a%mod;
+
+//快速乘的快速幂
+ll quick_mul(ll x,ll n)
+{
+    ll res=0;
+    while(n)
+    {
+        if(n&1)res=(res+x)%mod;
+        x=(x+x)%mod;
+        n>>=1;
+    }
+    return res;
+}
+ll quick_pow(ll x,ll n)
+{
+    ll res=1;
+    while(n)
+    {
+        if(n&1) res=quick_mul(res,x)%mod;
+        x=quick_mul(x,x)%mod;
+        n>>=1;
+    }
     return res;
 }
 
