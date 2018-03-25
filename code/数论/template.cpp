@@ -220,6 +220,56 @@ ll quick_pow(ll x,ll n)
 //矩阵快速幂
 找F[i]=A*A[i-1]; 
 则F[n]=F[1]*A^(n-1);
+const int maxn = 2;
+const int mod = 2333333;
+struct mat{
+    ll m[maxn][maxn];
+}unit;
+mat operator *(mat a,mat b)
+{
+    mat res;
+    memset(res.m,0,sizeof(res.m));
+    for(int i=0;i<maxn;i++)
+        for(int j=0;j<maxn;j++)
+            for(int k=0;k<maxn;k++)
+                res.m[i][j]=(res.m[i][j]+a.m[i][k]*b.m[k][j])%mod;
+    return res;
+}
+void init() //单位矩阵
+{
+    for(int i=0;i<maxn;i++)
+        unit.m[i][i]=1;
+}
+mat pow_mat(mat x,ll n)
+{
+    mat res = unit;
+    while(n)
+    {
+        if(n&1) res=res*x;
+        x=x*x;
+        n>>=1;
+    }
+    return res;
+}
+
+int main()
+{
+    ll n,k;
+    init();
+    mat base;
+    base.m[0][0]=1; base.m[0][1]=1; base.m[1][0]=1; base.m[1][1]=0;
+    cin>>n>>k;
+    mat a;
+    a.m[0][0]=1;
+    a.m[1][0]=1;
+    //a.m[0][1]=1;//斐波那契的矩阵两种写法,2*2的跟2*1的,其实都一样
+    //a.m[1][1]=0;//只要考虑到Fn+1,Fn就可以了
+    mat fn=pow_mat(base,n)*a;
+    ans += (1ll*fn.m[1][0])%mod;
+    cout<<(ans+mod)%mod;
+    return 0;
+}
+
 
 
 /*********8.素数筛选*********/
