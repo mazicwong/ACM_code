@@ -14,3 +14,5 @@
 5. 不要开全场个位数过的题
 
 6. unsigned long long 是 %llu
+
+7. find the biggest, just init the ans=-0x3f3f3f, or sometimes you will come across some accident that is hard to notice.
