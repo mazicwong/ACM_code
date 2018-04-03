@@ -384,10 +384,10 @@ da: O(nlogn)   dc3: O(n)
  *  height[] 0 0 3 0 2 0 1
  */
 
-const int MAXN = 1e5+5;
-int sa[MAXN];
-int Rank[MAXN],height[MAXN];
-int t1[MAXN],t2[MAXN],c[MAXN];//求SA数组需要的中间变量,不需要赋值
+const int maxn = 1e5+5;
+int sa[maxn];
+int Rank[maxn],height[maxn];
+int t1[maxn],t2[maxn],c[maxn];//求SA数组需要的中间变量,不需要赋值
 //要排序的母串放在str数组中,从str[0]到str[n-1],长度为n,且最大值小于m,
 //除str[n]外的所有str[i]都大于0,r[n]=0
 //函数结束以后结果放在sa数组中
@@ -440,7 +440,7 @@ void build_sa(int str[],int n,int m)
 /**************倍增算法**************************/
 
 /**************RMQ算法***************************/
-int dp[MAXN][20];
+int dp[maxn][20];
 namespace RMQ //蓝书P198
 {
     void init(int n)
@@ -466,8 +466,8 @@ namespace RMQ //蓝书P198
 /**************RMQ算法***************************/
 
 
-char str[MAXN];//原串[0..n-1]
-int r[MAXN];//转换为int串[0..n-1]
+char str[maxn];//原串[0..n-1]
+int r[maxn];//转换为int串[0..n-1]
 
 int main()//hdu4552 求所有前缀出现的次数之和
 {
@@ -524,9 +524,9 @@ Ma[i]:   存插入#扩展后的新串
 Mp[i]:   
 */
 
-const int MAXN=110010;
-char Ma[MAXN*2];//新串,插入#后的
-int Mp[MAXN*2]; //Mp[i]-1是Ma[i]所在的回文子串在原串的长度
+const int maxn=110010;
+char Ma[maxn*2];//新串,插入#后的
+int Mp[maxn*2]; //Mp[i]-1是Ma[i]所在的回文子串在原串的长度
 void Manacher(char s[],int len)
 {
     //计算Ma[0..2*len)   
@@ -560,7 +560,7 @@ void Manacher(char s[],int len)
   * * Ma[i]: $ # a # b # a # a # b  #  a  #
   * * Mp[i]: 1 1 2 1 4 1 2 7 2 1 4  1  2  1
   * */
-char str[MAXN];
+char str[maxn];
 int main()
 {
     //freopen("in","r",stdin);
