@@ -51,8 +51,10 @@ void init()
 	}
 }
 
+
+/*****************贝尔数**************************/
 /*
-bell(n)是包含n个元素的集合的划分方法的数目
+bell(n)是包含n个元素的集合可以划分为多少个不同的非空子集
 bell数和stirling数的关系:  每个贝尔数都是"第二类Stirling数"的和。
 
 B(n) = Sum(1,n) S(n,k).
@@ -77,4 +79,27 @@ void GetBell() //求贝尔数
 		for (int j = 0; j <= i; j++)
 			bell[i] = (bell[i] + dp[i][j]) % MOD;
 	}
+}
+
+
+/*****************n个苹果放m个盘子可以有空盘**************************/
+//n个苹果放m个盘子可以有空的盘子
+//dp[n][m] = dp[m][m]   (n<m)
+//dp[n][m] = dp[n][m-1]+dp[n-m][m]  (n<=m) 有一个空盘，全都满(每个拿走一个)
+const int maxn = 15;
+int dp[maxn][maxn]; //dp[n][m]: n个苹果放在m个盘子里
+
+int dfs(int n,int m)
+{
+    if(n==0 || m==1) return 1;
+    if(n<m) return dfs(n,n);
+    else return dfs(n,m-1)+dfs(n-m,m);
+}
+
+int main()
+{
+    int m,n;
+    cin>>n>>m;
+    cout << dfs(n,m);
+    return 0;
 }
