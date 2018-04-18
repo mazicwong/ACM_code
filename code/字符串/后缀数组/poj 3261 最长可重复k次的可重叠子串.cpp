@@ -106,7 +106,7 @@ bool check(int mid)
 }
 int main()
 {
-    freopen("in","r",stdin);
+    //freopen("in","r",stdin);
     cin>>n>>k;
     for (int i=0;i<n;i++)
     {

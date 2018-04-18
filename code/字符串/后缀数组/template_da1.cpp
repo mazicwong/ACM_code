@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int MAXN=1e5+5;
+const int MAXN=1e5+5000;
 int sa[MAXN],Rank[MAXN],height[MAXN];
 //以下为倍增算法求后缀数组 
 int wa[MAXN],wb[MAXN],c[MAXN];
@@ -75,6 +75,7 @@ int main()//hdu4552 求所有前缀出现的次数之和
     while(scanf("%s",str)!=EOF)
     {
         int len=strlen(str);
+        str[len]=0;
         da(str,len+1,125); //A:65, a:97   97+28=125
         calheight(str,len);
         //以上都是套路
@@ -86,7 +87,6 @@ int main()//hdu4552 求所有前缀出现的次数之和
             ans = (ans+RMQ::lcp(1,i))%256;
         printf("%d\n",ans);
         
-        /*
         puts("--------------All Suffix--------------");
         for(int i=1; i<=len; ++i)
         {
@@ -113,7 +113,6 @@ int main()//hdu4552 求所有前缀出现的次数之和
         for(int i=1; i<=len; ++i)
             printf("Rank[%2d ] = %2d\n",i,Rank[i]);
         puts("------------------END-----------------");
-        */
     }
     return 0;
 }

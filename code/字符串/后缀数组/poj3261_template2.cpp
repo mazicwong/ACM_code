@@ -12,7 +12,7 @@
 #include <stack>
 #include <time.h>
 using namespace std;
-const int MAXN=1e5+5;
+const int MAXN=1e6+5000;
 int sa[MAXN],Rank[MAXN],height[MAXN];
 //以下为倍增算法求后缀数组 
 int wa[MAXN],wb[MAXN],c[MAXN];
@@ -54,83 +54,46 @@ void calheight(const char *r,int n)
     for(int i=n;i>=1;--i) ++sa[i],Rank[i]=Rank[i-1];//重排
 }
 
-
-char str[MAXN];//原串[0..n-1]
-int id[MAXN];
-bool vis[MAXN];
 bool check(int mid,int n,int k)
 {
-    memset(vis,0,sizeof(vis));
     int cnt=0;
-    for(int i=2;i<=n;i++) //全串长
+    for(int i=2;i<=n;i++)
     {
         if(height[i]>=mid)
-        {
-            for(int j=0;j<k;j++) //找到对应原始串
-            {
-                if(id[sa[i]]==j) cnt+=(vis[j]?0:1),vis[j]=true;
-                if(id[sa[i-1]]==j) cnt+=(vis[j]?0:1),vis[j]=true;
-            }
-        }
-        else
-        {
-            if(cnt>=k) return true;
-            cnt=0;
-            memset(vis,0,sizeof(vis));
-        }
+            cnt++;
+        else cnt=1;
+        if(cnt>=k) return 1;
     }
-    if(cnt>=k) return true;
-    else return false;
+    return 0;
 }
-int main()
-{
-    int t;cin>>t;
-    while(t--)
-    {
-        int k; cin>>k;
-        char tmp[105];
-        int idx=0;
-        int cnt=1;
-        for(int i=0;i<k;i++)
-        {
-            scanf("%s",tmp);
-            for(int j=0;j<strlen(tmp);j++)
-            {
-                id[idx]=i;
-                str[idx++] = tmp[j];
-            }
-            id[idx]=i;
-            str[idx++] = '#'+cnt; cnt++;
-            for(int j=strlen(tmp)-1;j>=0;j--)
-            {
-                id[idx]=i;
-                str[idx++] = tmp[j];
-            }
-            id[idx]=i;
-            str[idx++] = '#'+cnt; cnt++;
-        }
-        int len=idx;
-        //cout << str << endl;
-        //cout << len << endl;
-        str[len]=0;
-        da(str,len+1,255);
-        calheight(str,len);
-        //以上都是套路
 
-        //法1
-        int l=1; int r=len;int mid;
-        int ans=0;
-        while(l<=r)
-        {
-            mid = (l+r)/2;
-            if(check(mid,len,k))
-            {
-                ans = mid;
-                l = mid+1;
-            }
-            else r=mid-1;
-        }
-        printf("%d\n",ans);
+char str[MAXN];//原串[0..n-1]
+int main()//hdu4552 求所有前缀出现的次数之和
+{
+    int n,k; cin>>n>>k;
+    int a;
+    for(int i=0;i<n;i++)
+    {
+        cin>>a;
+        str[i]=a+'a'+1;
     }
+    str[n]=0;
+    da(str,n+1,1000000+150); //A:65, a:97   97+28=125
+    calheight(str,n);
+    //以上都是套路
+
+    int l=0,r=n; int mid;
+    int ans=0;
+    while(l<=r)
+    {
+        mid=(l+r)/2;
+        if(check(mid,n,k))
+        {
+            ans=mid;
+            l=mid+1;
+        }
+        else r=mid-1;
+    }
+    cout << ans;
     return 0;
 }
