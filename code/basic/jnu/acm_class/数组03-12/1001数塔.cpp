@@ -1,3 +1,4 @@
+//在讲述DP算法的时候，一个经典的例子就是数塔问题
 #include <bits/stdc++.h>
 using namespace std;
 const int maxn = 105;

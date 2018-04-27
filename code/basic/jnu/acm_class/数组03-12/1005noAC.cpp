@@ -1,3 +1,5 @@
+//“今年暑假不AC？”
+//hdu2037
 #include <bits/stdc++.h>
 using namespace std;
 int n;

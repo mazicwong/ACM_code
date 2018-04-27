@@ -1,3 +1,4 @@
+//Given a sequence a[1],a[2],a[3]......a[n], your job is to calculate the max sum of a sub-sequence
 #include <bits/stdc++.h>
 using namespace std;
 //zuida zichuan he
