@@ -1,34 +1,21 @@
 #include <bits/stdc++.h>
 using namespace std;
-/*
- * problem :hdu 1754
- * 单点更新(加),区间查询(找最值)
- *
- * 输入: arr[]存叶子节点  (1...n)
- * build()  建树
- * update() 更新值
- * query()  查询最值
- */
-//1.不要忘了建树
-//2.左移优先级小于加号,右儿子写成了tr[rt].r<<1+1调试半天
-const int maxn = 1e5+5;
+const int maxn = 100000+5;
+int a[maxn];
 struct node{
     int l,r;
     int val;
 }tr[maxn*4];
-int a[maxn];
-
 void pushup(int rt)
 {
     tr[rt].val = max(tr[rt<<1].val, tr[rt<<1|1].val);
 }
-
 void build(int rt,int l,int r)
 {
     tr[rt].l=l; tr[rt].r=r;
     if(l==r)
     {
-        tr[rt].val=a[l];
+        tr[rt].val=0;
     }
     else
     {
@@ -38,15 +25,15 @@ void build(int rt,int l,int r)
         pushup(rt);
     }
 }
-
+int ans = 0;
 void update(int rt,int ql,int qr,int val)
 {
-    if(ql==tr[rt].l && tr[rt].r==qr) //单点更新
+    if(ql<=tr[rt].l && tr[rt].r<=qr)
     {
-        tr[rt].val = val;
+        tr[rt].val++;
+        ans = max(ans,tr[rt].val);
         return ;
     }
-    
     int mid = (tr[rt].l+tr[rt].r)/2;
     if(qr<=mid) update(rt<<1,ql,qr,val);
     else if(mid<ql) update(rt<<1|1,ql,qr,val);
@@ -57,17 +44,17 @@ void update(int rt,int ql,int qr,int val)
     }
     pushup(rt);
 }
-int ans = 0x3f3f3f3f;
+
 void query(int rt,int ql,int qr)
 {
-    if(ql<=tr[rt].l && tr[rt].r<=qr)
+    if(ql==tr[rt].l && tr[rt].r==qr)
     {
         ans = max(ans, tr[rt].val);
         return;
     }
     int mid = (tr[rt].l+tr[rt].r)/2;
     if(qr<=mid) query(rt<<1,ql,qr);
-    else if(mid<ql) query(rt<<1|1,ql,qr); //<=
+    else if(mid<ql) query(rt<<1|1,ql,qr);
     else
     {
         query(rt<<1,ql,mid);
@@ -77,26 +64,29 @@ void query(int rt,int ql,int qr)
 
 int main()
 {
-    int n,q;cin>>n>>q;
-    for (int i=0;i<n;i++)
-        scanf("%d",&a[i]);
-    build(1,1,n);
-    char str[5];
-    while(q--)
-    {
-        scanf("%s",str);
-        if(str[0]=='U')
-        {
-            int idx,val; cin>>idx>>val;
-            update(1,idx,idx,val);
+    int t;cin>>t;
+    while(t--){
+        int n,d;
+        cin>>n>>d;
+        int maxx = 0;
+        for(int i=0;i<n;i++){
+            scanf("%d",&a[i]);
+            maxx = max(maxx,a[i]);
         }
-        else if (str[0]=='Q')
-        {
-            int l,r; cin>>l>>r;
-            ans=0;
-            query(1,1,n);
-            cout<<ans<<endl;
+        ans = 0;
+        build(1,1,maxx+d);
+        for(int i=0;i<n;i++){
+            //cout << "maxx: " << max(1,a[i]-d) << "  minn: " << min(maxx+d,a[i]+d) << endl;
+            update(1,max(1,a[i]-d),min(maxx,a[i]+d),a[i]);
         }
+        cout << ans << endl;
+        /*
+        for(int i=0;i<n;i++){
+            ans = 0;
+            query(1,a[i],a[i]);
+            cout << i << "  " << ans  <<"  " << tr[i].val << endl;
+        }
+        */
     }
     return 0;
 }

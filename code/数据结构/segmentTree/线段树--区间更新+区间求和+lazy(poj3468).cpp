@@ -45,110 +45,98 @@ hdu 1698
 typedef long long ll;
 const int maxn = 1e5 + 5;
 
-inline int L(int l) {return l<<1;}
-inline int R(int r) {return (r<<1)+1;}
-inline int MID(int l, int r) {return (l+r)>>1;}
 struct node{
     int l,r;
     ll Sum;   //节点属性值,这里是区间和
     ll lazy;  //该节点对应所有子节点应该加上的值,才不用一直更新到叶子
-}tree[maxn<<2];     //tree[1..2^n-1]
+}tr[maxn<<2];     //tr[1..2^n-1]
 int arr[maxn];      //存放初始节点arr[1..n]
-ll sum = 0;         //查询到的和
 
 
 //"创建区间"和"更新区间"最后的递归回溯时向上更新value
 //查询就不用了,
 void PushUp(int rt)
 {
-    tree[rt].Sum = tree[L(rt)].Sum + tree[R(rt)].Sum;
+    tr[rt].Sum = tr[rt<<1].Sum + tr[rt<<1+1].Sum;
 }
 
 //"查询"和"更新"时先PushDown一下处理子区间的lazy和value
 void PushDown(int rt)
 {
-    if (tree[rt].lazy)
+    if (tr[rt].lazy)
     {
-        tree[L(rt)].lazy += tree[rt].lazy;
-        tree[R(rt)].lazy += tree[rt].lazy;
-        tree[L(rt)].Sum += (tree[L(rt)].r-tree[L(rt)].l+1)*tree[rt].lazy;
-        tree[R(rt)].Sum += (tree[R(rt)].r-tree[R(rt)].l+1)*tree[rt].lazy;
+        tr[rt<<1].lazy += tr[rt].lazy;
+        tr[rt<<1|1].lazy += tr[rt].lazy;
+        tr[rt<<1].Sum += (tr[rt<<1].r-tr[rt<<1].l+1)*tr[rt].lazy;
+        tr[rt<<1|1].Sum += (tr[rt<<1|1].r-tr[rt<<1|1].l+1)*tr[rt].lazy;
 
-        tree[rt].lazy = 0;
+        tr[rt].lazy = 0;
     }
 }
 
-void build(int l, int r, int rt)
+void build(int rt,int l, int r)
 {
-    tree[rt].l=l; tree[rt].r=r;
-    tree[rt].lazy=0;
+    tr[rt].l=l; tr[rt].r=r;
+    tr[rt].lazy=0;
     if (l==r) //找到叶子,赋值
     { 
-        tree[rt].Sum = arr[l];
+        tr[rt].Sum = arr[l];
         return;
     }
-
-    //分治
-    int mid = MID(l,r);
-    build(l,mid,L(rt));
-    build(mid+1,r,R(rt));
-
-    //回溯维护value(区间和)
-    //因为建立属性值顺序只能从下到上,但是建树是从上往下的,所以回溯
-    PushUp(rt);
+    else
+    {
+        int mid = (l+r)>>1;
+        build(rt<<1,l,mid);
+        build(rt<<1|1,mid+1,r);
+        PushUp(rt);
+    }
 }
 
 //区间更新(每个点加一个值)
-void update(int l, int r, int val, int rt)//更新范围[l,r],当前所在的根rt
+void update(int rt,int ql, int qr, int val)//更新范围[l,r],当前所在的根rt
 {
-    //if (l<=L(rt) && R(rt)<=r) ??? 因为(tree[rt].l,tree[rt].r)是表示该节点对应的区间范围;而L(rt),R(rt)是他的左右儿子节点
-    //拿root=1举例子就很明显了,(1,n);(2,3);
-    if (l<=tree[rt].l && tree[rt].r<=r)//单点更新的话,这里就用等于
+    if(ql<=tr[rt].l && tr[rt].r<=qr)//单点更新的话,这里就用等于
     {
-        //这个节点在更新的区间里面,直接算完lazy和value然后退出
-        tree[rt].lazy += val;
-        tree[rt].Sum += (tree[rt].r-tree[rt].l+1)*val;
+        tr[rt].lazy += val;
+        tr[rt].Sum += (tr[rt].r-tr[rt].l+1)*val;
         return;
     }
 
     PushDown(rt);
-    if (tree[rt].l == tree[rt].r) return;
+    if(tr[rt].l == tr[rt].r) return;
 
-    //分治
-    int mid = MID(tree[rt].l, tree[rt].r);
-    if (mid<l) update(l,r,val,R(rt));        //在右子树中
-    else if (mid>=r) update(l,r,val,L(rt));  //在左子树中
-    else                                     //在左右子树中
+    int mid = (tr[rt].l+tr[rt].r)>>1;
+    if(mid<ql) update(rt<<1|1,ql,qr,val);      //在右子树中
+    else if(mid>=qr) update(rt<<1,ql,qr,val);  //在左子树中
+    else                                       //在左右子树中
     {
-        update(l,mid,val,L(rt));
-        update(mid+1,r,val,R(rt));
+        update(rt<<1,ql,mid,val);
+        update(rt<<1|1,mid+1,qr,val);
     }
-
-    //回溯维护value
     PushUp(rt);
 }
 
+
 //区间查询(和)
-void query(int l, int r, int rt)//查找的范围[l,r],当前所在根rt
+ll sum = 0;         //查询到的和
+void query(int rt,int ql, int qr)//查找的范围[l,r],当前所在根rt
 {
-    if (l<=tree[rt].l && tree[rt].r<=r)
+    if (ql<=tr[rt].l && tr[rt].r<=qr)
     {
-        sum += tree[rt].Sum;
+        sum += tr[rt].Sum;
         return;
     }
 
     PushDown(rt);
-    if (tree[rt].l == tree[rt].r) return;
+    if (tr[rt].l == tr[rt].r) return;
 
-
-    //分治
-    int mid = MID(tree[rt].l, tree[rt].r);
-    if (mid<l) query(l,r,R(rt));
-    else if (mid>=r) query(l,r,L(rt));
+    int mid = (tr[rt].l+tr[rt].r)>>1;
+    if (mid<ql) query(rt<<1|1,ql,qr);
+    else if (mid>=qr) query(rt<<1,ql,qr);
     else
     {
-        query(l,mid,L(rt));
-        query(mid+1,r,R(rt));
+        query(rt<<1,ql,mid);
+        query(rt<<1|1,mid+1,qr);
     }
 }
 
@@ -160,7 +148,7 @@ int main()
     {
         for (int i=1; i<=n;i++)
             scanf("%d",&arr[i]);
-        build(1,n,1);//left,right,rt
+        build(1,1,n);//left,right,rt
 
         while (q--)
         {
@@ -171,14 +159,14 @@ int main()
                 int idxl,idxr;
                 ll val;
                 scanf("%d%d%lld",&idxl,&idxr,&val);
-                update(idxl,idxr,val,1);//left,right,value,rt
+                update(1,idxl,idxr,val);//left,right,value,rt
             }
             else //sum
             {
                 int l, r;
                 scanf("%d%d",&l,&r);
                 sum = 0;
-                query(l, r, 1);//left,right,rt
+                query(1,l,r);//left,right,rt
                 printf("%lld\n",sum);
             }
         }

@@ -139,24 +139,51 @@ int main()
    询问 sum(i);      O(logn) 统计1..i元素值的和
  */
 int lowbit(int x) {return x&-x;}  //返回2^k,其中k是末尾0的个数
-int sum(int i)
-{
-    int ans=0;
-    while(i>0)
-    {
-        ans+=c[i];
-        i-=lowbit(i);
-    }
-    return ans;
-}
 void add(int i,int val)
 {
     while(i<=n)
     {
-        c[i]+=val;
+        c[i] += val;
         i+=lowbit(i);
     }
 }
+int sum(int i)
+{
+    int res=0;
+    while(i>0)
+    {
+        res += c[i];
+        i-=lowbit(i);
+    }
+    return res;
+}
+int main()
+{
+    cin>>n>>m;
+    for(int i=1;i<=n;i++) arr[i]=read(), add(i,arr[i]);
+    while(m--)
+    {
+        ll flag=read();
+        if(flag==2)
+        {
+            l=read(); r=read();  cout<<sum(r)-sum(l-1)<<endl;
+        }
+        else
+        {
+            l=read(); r=read(); v=read();
+            for(int i=l;i<=r;i++)
+            {
+                if(arr[i]>=v && arr[i]%v==0)
+                {
+                    add(i,val-arr[i]); //arr[i]替换为val
+                    arr[i]=v;
+                }
+            }
+        }
+    }
+}
+
+
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -339,9 +366,6 @@ int main()
  * query()  查询最值
  */
 const int maxn = 2e5 + 5;
-inline int L(int l) { return l<<1;}
-inline int R(int r) { return (r<<1)+1;}
-inline int MID(int l, int r) { return (l+r)>>1;}
 struct node{
     int l,r;
     int Max;//存区间最大值
