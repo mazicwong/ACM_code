@@ -71,13 +71,8 @@ int main()
     memset(path,-1,sizeof(path));//将path数组初始化为-1
     int n=6;
     for(int i=1;i<=n;i++)
-    {
-        for(int j=1;j<=m;j++)
-        {
+        for(int j=1;j<=n;j++)
             p_time[i][j]=(i==j?0:INF);
-          //  cout << p_time[i][j];
-        }
-    }
     p_time[1][2]=10;p_time[1][4]=30;p_time[2][3]=50;p_time[2][5]=100;p_time[3][5]=5;p_time[4][3]=20;p_time[4][5]=60;p_time[5][6]=10;//p_time[i][j]表示节点i到节点j的距离
     
 //	for(i=1;i<=n;i++)
