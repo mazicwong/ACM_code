@@ -69,10 +69,10 @@ void print(int beg,int n)       //beg为出发节点，n表示图中节点总数
 int main()
 {
     memset(path,-1,sizeof(path));//将path数组初始化为-1
-    int i,j,n=6;
-    for(i=1;i<=n;i++)
+    int n=6;
+    for(int i=1;i<=n;i++)
     {
-        for(j=1;j<=n;j++)
+        for(int j=1;j<=m;j++)
         {
             p_time[i][j]=(i==j?0:INF);
           //  cout << p_time[i][j];
