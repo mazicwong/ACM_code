@@ -131,20 +131,24 @@ int main()
  * 单点更新,区间求和
  *
  * 树状数组是树和数组的结合,其实就是用一棵树的结构来存储一个数组,方便各种区间操作
- * c[i]为树状数组; A[i]为要表示的原始数组
+ * 如: 求一棵树上所有节点的子节点个数和? 可以先通过dfs遍历树,对每个节点的子节点进行st和en的标记, 把树映射到区间上, 然后用BIT解决
  *
    操作:
+   A[i]: 为要表示的原始数组 (有时需要离散化得到)
+   c[i]: 树状数组
    插入 add(i,1);    O(logn) 第i个元素自增1
    删除 add(i,-1);
    询问 sum(i);      O(logn) 统计1..i元素值的和
  */
+int arr[maxn];
+int c[maxn];
 int lowbit(int x) {return x&-x;}  //返回2^k,其中k是末尾0的个数
 void add(int i,int val)
 {
     while(i<=n)
     {
         c[i] += val;
-        i+=lowbit(i);
+        i+=lowbit(i); // 5行加,7行减
     }
 }
 int sum(int i)
@@ -153,7 +157,7 @@ int sum(int i)
     while(i>0)
     {
         res += c[i];
-        i-=lowbit(i);
+        i-=lowbit(i); // 5行加,7行减
     }
     return res;
 }
