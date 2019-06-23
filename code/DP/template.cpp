@@ -1,9 +1,9 @@
-1. LCS
-2. LIS
+1. LCS(最长公共自序列)
+2. LIS(最长上升子序列)
 3. DP+dfs
 4. 状压DP
 5. 数位DP
-6. 背包
+6. 背包(01 + 多重 + 完全)
 
 /*
  * 1. LCS:最长公共子序列
@@ -380,10 +380,9 @@ int main()
         memset(dp,0,sizeof(dp));
         int n,vv;
         cin >> n >> vv;
-        for (int i=0;i<n;i++)
-            scanf("%d",&w[i]);
-        for (int i=0;i<n;i++)
-            scanf("%d",&v[i]);
+        for (int i=0;i<n;i++) cin>>w[i];
+        for (int i=0;i<n;i++) cin>>v[i];
+	    
         for (int i=0;i<n;i++)
             for (int j=vv;j>=v[i];j--)
                 dp[j]=max(dp[j],dp[j-v[i]]+w[i]);
@@ -425,5 +424,25 @@ int main()
 	return 0;
 }
 
-//完全背包
-
+//完全背包(转移方程顺序跟01反过来)
+const int maxn = 11111;
+const int INF = 0x3f3f3f3f;
+int w[maxn];
+int v[maxn];
+int dp[maxn*100];
+int n,V;
+// To maximium w, under the limit of V
+int main()
+{
+	cin>>n>>V;
+	for(int i=0; i<n; i++)
+		cin >> v[i] >> w[i];
+	memest(dp, 0, sizeof(dp));
+	
+	for(int i=0; i<n; i++)
+    	    for(int j=v[i]; j<=V; j++)
+        	dp[j]=max(dp[j],dp[j-v[i]]+w[i]);
+    
+	cout << dp[V];
+	eturn 0;
+}
