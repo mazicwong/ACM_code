@@ -74,6 +74,24 @@ int main()
     return 0;  
 }
 
+
+An Interesting Example and the Answer(1449):
+1个1个拿，正好拿完。
+2个2个拿，还剩1个。
+3个3个拿，正好拿完。
+4个4个拿，还剩1个。
+5个5个拿，还差1个。
+6个6个拿，还剩3个。
+7个7个拿，正好拿完。
+8个8个拿，还剩1个。
+9个9个拿，正好拿完。
+
+# random appendix
+use "：% s / old / new / g" for global replacement in vim where %,s,g stand for all_line,switch,global respectively.
+use "g++ test.cpp; cat in | ./a.out" to execute code test with testcase storing in file in.
+
+
+
 /*********3.高斯消元*********/
 
 
