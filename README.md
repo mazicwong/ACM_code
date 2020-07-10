@@ -1,20 +1,20 @@
-# ACM-ICPC
-ACM-ICPC Template
+# ACM-ICPC Template
 
 ## Dwnload
-download the lastest commit only
+download the lastest commit use
+
 `git clone --depth=1 git@github.com:mazicwong/ACM_code.git`
 
-## List
-> - 1_数据结构
-> - 2_字符串
-> - 3_图论
-> - 4_搜索
-> - 5_DP
-> - 6_贪心
-> - 7_数论
-> - 8_博弈论
-> - 9_网络流
+## TOC
+> - 01_dataStructure(数据结构)
+> - 02_string(字符串)
+> - 03_graph(图论)
+> - 04_search(搜索)
+> - 05_DP(动态规划)
+> - 06_greedy(贪心)
+> - 07_numberTheory(数论)
+> - 08_gameTheory(博弈论)
+> - 09_networkFlow(网络流)
 > - 10_组合数学
 > - 11_计算几何
 > - 12_二分答案+判断
@@ -27,6 +27,8 @@ download the lastest commit only
 > - 19_STL
 > - 20_数学题
 
+## Related Tutorial
+[https://www.programiz.com/dsa/graph-dfs](https://www.programiz.com/dsa/graph-dfs)
 
 ## JNU_ACM
 [https://github.com/jnutxdy/JNU_ACMTemplate](https://github.com/jnutxdy/JNU_ACMTemplate)
