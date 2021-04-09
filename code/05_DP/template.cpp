@@ -4,6 +4,7 @@
 4. 状压DP
 5. 数位DP
 6. 背包(01 + 多重 + 完全)
+7. 三维DP
 
 /*
  * 1. LCS:最长公共子序列
@@ -446,3 +447,9 @@ int main()
 	cout << dp[V];
 	eturn 0;
 }
+
+
+7. 3D-dp
+dp[i][j][k] = True / False   # can "row i, column j, k time" meet the needs
+dp[0][0][nums[0][0]] = (nums[0][0] < total)
+dp[i][j][k] = dp[i][j-1][k-nums[i][j]] or dp[i-1][j][k-nums[i][j]]
