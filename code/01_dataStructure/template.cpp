@@ -44,6 +44,25 @@ void unite(int x, int y)
     x=find(x), y=find(y);
     if (x!=y) fa[x]=y; //x指向y
 }
+# upd: 不加rank可能会有错误，e.g. (1,2; 2,1; 3,4; 3,5;) is right, while (1,2; 2,1; 4,3; 5,3) will throw error
+# the new template in python is
+
+fa = [i for i in range(N + 1)]
+rank = [0 for i in range(N + 1)]
+def find(x):
+    if x==fa[x]:
+        return x
+    else:
+        fa[x] = find(fa[x])
+        return fa[x]
+def unite(x, y):
+    x, y = find(x), find(y)
+    if rank[x] > rank[y]:
+        fa[y] = x
+    else:
+        fa[x] = y
+        if rank[x] == rank[y]:
+            rank[y] += 1
 
 ///////////////////////////////////////////////////////////////////////////
 2.RMQ
